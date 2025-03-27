@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Collaboration Tools</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Team Collaboration Tools</h1>
+            
+            <!-- App Selection Section -->
+            <div id="app-selection" class="app-selection">
+                <p class="welcome-text">Choose the collaboration tool you need</p>
+                <div class="app-cards">
+                    <div class="app-card" id="retrospective-card">
+                        <div class="app-card-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3>Retrospective Board</h3>
+                        <p>Collect and organize team feedback with collaborative sticky notes</p>
+                        <a href="/retrospective" class="btn primary">Select <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div class="app-card" id="planning-poker-card">
+                        <div class="app-card-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <h3>Planning Poker</h3>
+                        <p>Estimate user stories using the Fibonacci sequence with your team</p>
+                        <a href="/planning-poker" class="btn primary">Select <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Footer -->
+        <footer>
+            <p>Created for Web squad ❤️ <span id="current-year"></span></p>
+        </footer>
+    </div>
+
+    <script>
+        // Set the current year in the footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html> 
