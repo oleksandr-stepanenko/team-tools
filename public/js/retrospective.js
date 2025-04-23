@@ -35,6 +35,7 @@ let currentRoomId = null;
 let currentTemplate = null;
 let availableTemplates = {};
 let selectedTemplateId = null;
+let currentDraggedSticky = null;
 
 // Column icons mapping
 const columnIcons = {
@@ -346,11 +347,14 @@ function renderColumnsForTemplate(templateId) {
         column.innerHTML = `
             <h3><i class="fas ${iconClass}"></i> ${columnTitle}</h3>
             ${columnDescription ? `<p class="column-description">${columnDescription}</p>` : ''}
-            <div class="sticky-container" id="${columnId}-container"></div>
+            <div class="sticky-container" id="${columnId}-container" data-category="${columnId}"></div>
         `;
         
         columnsContainer.appendChild(column);
     });
+    
+    // Initialize drag and drop for all sticky containers
+    initDragAndDrop();
     
     // Update columns layout based on the number of columns
     updateColumnsLayout();
@@ -432,17 +436,26 @@ function addStickyToBoard(sticky) {
     stickyElement.dataset.id = sticky.id;
     stickyElement.dataset.category = sticky.category;
     
+    // Make the sticky draggable
+    stickyElement.draggable = true;
+    
     const formattedTime = new Date(sticky.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     
     stickyElement.innerHTML = `
         <div class="sticky-content">${escapeHTML(sticky.content)}</div>
         <div class="sticky-footer">
             <span class="sticky-time">${formattedTime}</span>
-            <button class="vote-btn" data-id="${sticky.id}">
-                <i class="fas fa-thumbs-up"></i>
-                <span class="vote-count">${sticky.votes}</span>
-            </button>
+            <div class="sticky-actions">
+                <button class="vote-btn" data-id="${sticky.id}">
+                    <i class="fas fa-thumbs-up"></i>
+                    <span class="vote-count">${sticky.votes}</span>
+                </button>
+                <button class="delete-btn" data-id="${sticky.id}" title="Delete note">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </div>
         </div>
+        <div class="drag-handle" title="Drag to move"><i class="fas fa-grip-lines"></i></div>
     `;
     
     // Add vote event listener
@@ -450,6 +463,16 @@ function addStickyToBoard(sticky) {
     voteBtn.addEventListener('click', () => {
         socket.emit('vote-sticky', currentRoomId, sticky.id);
     });
+    
+    // Add delete event listener
+    const deleteBtn = stickyElement.querySelector('.delete-btn');
+    deleteBtn.addEventListener('click', () => {
+        deleteSticky(sticky.id);
+    });
+    
+    // Add drag event listeners
+    stickyElement.addEventListener('dragstart', handleDragStart);
+    stickyElement.addEventListener('dragend', handleDragEnd);
     
     container.appendChild(stickyElement);
     
@@ -462,6 +485,22 @@ function addStickyToBoard(sticky) {
         stickyElement.style.opacity = '1';
         stickyElement.style.transform = 'translateY(0)';
     }, 10);
+}
+
+// Function to delete a sticky note
+function deleteSticky(stickyId) {
+    // Ask for confirmation before deleting
+    if (confirm('Are you sure you want to delete this note?')) {
+        // Send delete request to server
+        socket.emit('delete-sticky', currentRoomId, stickyId);
+        
+        // Show pending deletion state on the UI immediately for better UX
+        const stickyElement = document.querySelector(`.sticky-note[data-id="${stickyId}"]`);
+        if (stickyElement) {
+            stickyElement.style.opacity = '0.5';
+            stickyElement.style.transform = 'scale(0.95)';
+        }
+    }
 }
 
 function updateStickyVotes(stickyId, votes) {
@@ -541,6 +580,11 @@ socket.on('sticky-voted', (stickyId, votes) => {
     updateStickyVotes(stickyId, votes);
 });
 
+socket.on('sticky-deleted', (stickyId) => {
+    removeSticky(stickyId);
+    showNotification('Note has been deleted');
+});
+
 socket.on('connect', () => {
     init();
 });
@@ -566,4 +610,172 @@ socket.on('error', (errorMessage) => {
 
 socket.on('disconnect', () => {
     showNotification('Connection lost. Please refresh the page.', true);
+});
+
+// Function to remove a sticky note from the board
+function removeSticky(stickyId) {
+    const stickyElement = document.querySelector(`.sticky-note[data-id="${stickyId}"]`);
+    
+    if (stickyElement) {
+        // Add a fade-out animation before removing
+        stickyElement.style.opacity = '0';
+        stickyElement.style.transform = 'scale(0.8)';
+        
+        // Remove the element after animation completes
+        setTimeout(() => {
+            stickyElement.remove();
+        }, 300);
+    }
+}
+
+// Drag and Drop functionality
+function initDragAndDrop() {
+    // Find all sticky containers
+    const stickyContainers = document.querySelectorAll('.sticky-container');
+    
+    // Add event listeners to each container
+    stickyContainers.forEach(container => {
+        container.addEventListener('dragover', handleDragOver);
+        container.addEventListener('dragenter', handleDragEnter);
+        container.addEventListener('dragleave', handleDragLeave);
+        container.addEventListener('drop', handleDrop);
+    });
+}
+
+function handleDragStart(e) {
+    // Set currentDraggedSticky to the sticky being dragged
+    currentDraggedSticky = this;
+    
+    // Add a class to indicate it's being dragged
+    this.classList.add('dragging');
+    
+    // Set ghost drag image
+    const dragIcon = document.createElement('div');
+    dragIcon.className = 'drag-ghost';
+    dragIcon.textContent = '📝';
+    document.body.appendChild(dragIcon);
+    e.dataTransfer.setDragImage(dragIcon, 25, 25);
+    
+    // Remove the ghost element after it's been used
+    setTimeout(() => {
+        document.body.removeChild(dragIcon);
+    }, 0);
+    
+    // Set data transfer properties
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', this.dataset.id);
+    
+    // Add a transition to reduce opacity while dragging
+    this.style.opacity = '0.6';
+}
+
+function handleDragEnd(e) {
+    // Remove the dragging class
+    this.classList.remove('dragging');
+    
+    // Reset the opacity
+    this.style.opacity = '1';
+    
+    // Clear reference to dragged sticky
+    currentDraggedSticky = null;
+    
+    // Remove drop target highlights from all containers
+    document.querySelectorAll('.sticky-container').forEach(container => {
+        container.classList.remove('drag-over');
+    });
+}
+
+function handleDragOver(e) {
+    // Prevent default to allow drop
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    return false;
+}
+
+function handleDragEnter(e) {
+    // Add a class to highlight potential drop target
+    this.classList.add('drag-over');
+}
+
+function handleDragLeave(e) {
+    // Remove highlight class when leaving
+    this.classList.remove('drag-over');
+}
+
+function handleDrop(e) {
+    // Prevent default action
+    e.preventDefault();
+    
+    // Get sticky ID
+    const stickyId = e.dataTransfer.getData('text/plain');
+    
+    // Reference to the sticky element
+    const stickyElement = document.querySelector(`.sticky-note[data-id="${stickyId}"]`);
+    
+    // Only proceed if we have both sticky and current container
+    if (stickyElement && this.dataset.category) {
+        // Get the original category and new category
+        const originalCategory = stickyElement.dataset.category;
+        const newCategory = this.dataset.category;
+        
+        // Only proceed if the category has changed
+        if (originalCategory !== newCategory) {
+            // Move sticky to new column
+            moveSticky(stickyId, newCategory);
+        } else {
+            // If dropping in the same column, just append to the end
+            this.appendChild(stickyElement);
+        }
+    }
+    
+    // Remove drop highlight
+    this.classList.remove('drag-over');
+    
+    return false;
+}
+
+// Function to move a sticky to a different column
+function moveSticky(stickyId, newCategory) {
+    // Send the move request to the server
+    socket.emit('move-sticky', currentRoomId, stickyId, newCategory);
+    
+    // Update the UI to reflect the move (optimistic update)
+    const stickyElement = document.querySelector(`.sticky-note[data-id="${stickyId}"]`);
+    if (stickyElement) {
+        // Update the sticky's category attribute
+        stickyElement.dataset.category = newCategory;
+        
+        // Find the new container
+        const newContainer = document.getElementById(`${newCategory}-container`);
+        if (newContainer) {
+            // Move the sticky to the new container
+            newContainer.appendChild(stickyElement);
+            
+            // Show a subtle animation to indicate the move
+            stickyElement.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                stickyElement.style.transition = 'transform 0.3s ease';
+                stickyElement.style.transform = 'scale(1)';
+            }, 10);
+        }
+    }
+}
+
+socket.on('sticky-moved', (stickyId, newCategory) => {
+    // Update the UI to reflect the move
+    const stickyElement = document.querySelector(`.sticky-note[data-id="${stickyId}"]`);
+    if (stickyElement) {
+        // Update the data attribute
+        stickyElement.dataset.category = newCategory;
+        
+        // Find the correct container
+        const newContainer = document.getElementById(`${newCategory}-container`);
+        if (newContainer && !newContainer.contains(stickyElement)) {
+            // If the sticky isn't already in the container, move it
+            newContainer.appendChild(stickyElement);
+            
+            // Show a notification
+            showNotification('Sticky note moved to a different column');
+        }
+    }
 });

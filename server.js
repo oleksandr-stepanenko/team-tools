@@ -142,6 +142,44 @@ io.on('connection', (socket) => {
     io.to(roomId).emit('sticky-voted', stickyId, rooms[roomId].stickies[stickyId].votes);
   });
 
+  // Delete a sticky note
+  socket.on('delete-sticky', (roomId, stickyId) => {
+    if (!rooms[roomId] || !rooms[roomId].stickies || !rooms[roomId].stickies[stickyId]) {
+      socket.emit('error', 'Invalid room or sticky note');
+      return;
+    }
+    
+    // Remove the sticky note
+    delete rooms[roomId].stickies[stickyId];
+    
+    // Remove any votes for this sticky note
+    if (rooms[roomId].votes) {
+      Object.values(rooms[roomId].votes).forEach(userVotes => {
+        if (userVotes.has(stickyId)) {
+          userVotes.delete(stickyId);
+        }
+      });
+    }
+    
+    // Notify all clients in the room about the deletion
+    io.to(roomId).emit('sticky-deleted', stickyId);
+  });
+
+  // Move a sticky note to a different column
+  socket.on('move-sticky', (roomId, stickyId, newCategory) => {
+    if (!rooms[roomId] || !rooms[roomId].stickies || !rooms[roomId].stickies[stickyId]) {
+      socket.emit('error', 'Invalid room or sticky note');
+      return;
+    }
+    
+    // Update the sticky note's category
+    rooms[roomId].stickies[stickyId].category = newCategory;
+    
+    // Notify all other clients in the room about the move
+    // Use socket.to(roomId) to send to all clients in the room except the sender
+    socket.to(roomId).emit('sticky-moved', stickyId, newCategory);
+  });
+
   // -------------------------- //
   // Planning Poker Functionality
   // -------------------------- //
