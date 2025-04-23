@@ -93,3 +93,44 @@ A deeper reflective format examining what participants:
 ## License
 
 MIT 
+
+# Team Collaboration Tools CSS Organization
+
+This project uses a component-based CSS organization to improve maintainability and reuse across the application.
+
+## CSS Structure
+
+The CSS is organized as follows:
+
+- `public/css/main.css` - Main CSS file that imports all component styles
+- `public/css/components/` - Directory containing all component CSS files
+
+### Component Files
+
+The styles are split into logical components:
+
+- `variables.css` - Global CSS variables for colors, spacing, shadows, etc.
+- `base.css` - Base styles, container, utility classes, header and footer
+- `buttons.css` - Button styles and button-specific components
+- `forms.css` - Form elements, inputs, and form-related components
+- `modals.css` - Modal and dialog styles
+- `notifications.css` - Notification and alert styles
+- `app-selection.css` - App selection/landing page styles
+- `poker-game.css` - Planning poker specific styles
+- `retrospective.css` - Retrospective board specific styles
+
+## Benefits of This Approach
+
+1. **Improved Readability**: Smaller, focused files are easier to navigate and understand
+2. **Better Maintainability**: Changes to one component don't impact others
+3. **Easier Collaboration**: Team members can work on different components simultaneously
+4. **Reusability**: Component styles can be reused across the application
+5. **Performance**: Potentially better caching and load times for component-based files
+
+## How to Use
+
+When adding new styles:
+
+1. Identify which component the style belongs to
+2. Add the style to the appropriate component file
+3. If creating a new component, add an import to `main.css` 

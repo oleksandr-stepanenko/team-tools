@@ -37,11 +37,6 @@ let selectedCard = null;
 let participants = {};
 let revealedResults = false;
 
-// Initialize footer year
-function initFooter() {
-    currentYearSpan.textContent = new Date().getFullYear();
-}
-
 // Event Listeners
 createPokerRoomBtn.addEventListener('click', createPokerRoom);
 joinPokerRoomBtn.addEventListener('click', joinPokerRoom);
@@ -60,13 +55,10 @@ pokerCards.forEach(card => {
     card.addEventListener('click', () => selectPokerCard(card));
 });
 
-// Check URL parameters on load
-window.addEventListener('DOMContentLoaded', checkURLParams);
-
 // Initialize app
 function init() {
-    initFooter();
-    
+    checkURLParams();
+
     // Create confetti canvas if it doesn't exist
     if (!document.getElementById('confetti-canvas')) {
         const confettiCanvas = document.createElement('canvas');

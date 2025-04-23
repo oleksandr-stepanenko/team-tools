@@ -1,0 +1,114 @@
+/* App Selection Styles */
+.app-selection {
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: var(--bg-light);
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.welcome-text {
+    font-size: 1.25rem;
+    color: var(--text-color);
+    margin-bottom: 32px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.app-cards {
+    display: flex;
+    gap: 32px;
+    margin-top: 32px;
+}
+
+.app-card {
+    background-color: var(--bg-light);
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: var(--transition);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+}
+
+.app-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary-light);
+}
+
+.app-card-icon {
+    width: 88px;
+    height: 88px;
+    background: linear-gradient(45deg, var(--primary-color), var(--primary-hover));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+}
+
+.app-card-icon i {
+    font-size: 36px;
+}
+
+.app-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--primary-color);
+}
+
+.app-card p {
+    color: var(--text-color);
+    margin-bottom: 32px;
+    opacity: 0.8;
+    line-height: 1.6;
+}
+
+.app-card .btn {
+    margin-top: auto;
+}
+
+/* Responsive app selection */
+@media (max-width: 768px) {
+    .app-selection {
+        padding: 28px 20px;
+    }
+    
+    .app-cards {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    
+    .app-card {
+        padding: 24px;
+    }
+    
+    .app-card-icon {
+        width: 72px;
+        height: 72px;
+        margin-bottom: 20px;
+    }
+    
+    .app-card-icon i {
+        font-size: 30px;
+    }
+    
+    .welcome-text {
+        font-size: 1.1rem;
+        margin-bottom: 24px;
+    }
+} 

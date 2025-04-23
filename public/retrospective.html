@@ -1,32 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team Retrospective</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Retrospective</title>
+    <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
-    <div class="container">
-        <header>
-            <div class="back-button">
-                <a href="/" class="btn small"><i class="fas fa-arrow-left"></i> Back to Tools</a>
+    <!-- Site Header with Navigation -->
+    <header class="site-header">
+        <div class="header-container">
+            <a href="/" class="site-logo">
+                <i class="fas fa-compass"></i>
+                <span>Compass</span>
+            </a>
+            <nav class="site-nav">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/retrospective" class="nav-link active">Retrospective</a>
+                <a href="/planning-poker" class="nav-link">Planning Poker</a>
+                <div class="theme-toggle-wrapper">
+                    <label class="theme-toggle">
+                        <span class="toggle-icons">
+                            <i class="fas fa-sun"></i>
+                            <i class="fas fa-moon"></i>
+                        </span>
+                        <input type="checkbox" id="theme-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="content-wrapper">
+        <div class="container">
+            <div id="active-room-section" class="hidden">
+                <div class="room-header">
+                    <h2><i class="fas fa-door-open"></i> Room: <span id="current-room-id"></span></h2>
+                    <div class="room-actions">
+                        <button id="copy-room-btn" class="btn small"><i class="fas fa-copy"></i> Copy</button>
+                        <button id="share-room-btn" class="btn small"><i class="fas fa-share-alt"></i> Share</button>
+                    </div>
+                </div>
             </div>
-            <h1>Team Retrospective</h1>
-            
             <!-- Retrospective Room Info -->
             <div id="room-info">
                 <div id="welcome-section">
-                    <p class="welcome-text">Create a new room or join an existing one to start your retrospective session</p>
+                    <p class="welcome-text">Create a new room or join an existing one to start your retrospective
+                        session</p>
                     <div class="button-group">
-                        <button id="show-template-btn" class="btn primary"><i class="fas fa-plus-circle"></i> Create Room</button>
+                        <button id="show-template-btn" class="btn primary"><i class="fas fa-plus-circle"></i> Create
+                            Room</button>
                         <div class="join-room-container">
                             <input type="text" id="room-id-input" placeholder="Enter Room ID">
-                            <button id="join-room-btn" class="btn success"><i class="fas fa-sign-in-alt"></i> Join Room</button>
+                            <button id="join-room-btn" class="btn success"><i class="fas fa-sign-in-alt"></i> Join
+                                Room</button>
                         </div>
                     </div>
                 </div>
@@ -37,80 +71,83 @@
                         <!-- Template options will be added dynamically -->
                     </div>
                 </div>
-                <div id="active-room-section" class="hidden">
-                    <div class="room-header">
-                        <h2>Room: <span id="current-room-id"></span></h2>
-                        <div class="room-actions">
-                            <button id="copy-room-btn" class="btn small"><i class="fas fa-copy"></i> Copy ID</button>
-                            <button id="share-room-btn" class="btn small"><i class="fas fa-share-alt"></i> Share</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <!-- Retrospective Board -->
-        <main id="retrospective-board" class="hidden">
-            <div class="board-controls">
-                <button id="add-sticky-btn" class="btn primary"><i class="fas fa-plus"></i> Add Note</button>
+                
             </div>
             
-            <div class="columns-container" id="columns-container">
-                <!-- Columns will be generated dynamically based on the selected template -->
-            </div>
-        </main>
+            <!-- Floating Add Note Button - outside the board but visible when board is active -->
+            <button id="add-sticky-btn" class="btn primary floating-btn hidden"><i class="fas fa-plus"></i><span>Add Note</span></button>
 
-        <!-- Add Sticky Modal -->
-        <div id="add-sticky-modal" class="modal hidden">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3><i class="fas fa-sticky-note"></i> Add a New Note</h3>
-                    <button class="close-modal">&times;</button>
+            <!-- Retrospective Board -->
+            <main id="retrospective-board" class="hidden">
+                <div class="columns-container" id="columns-container">
+                    <!-- Columns will be generated dynamically based on the selected template -->
                 </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="sticky-category">Category:</label>
-                        <select id="sticky-category">
-                            <!-- Options will be populated dynamically based on the template -->
-                        </select>
+            </main>
+
+            <!-- Add Sticky Modal -->
+            <div id="add-sticky-modal" class="modal hidden">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3><i class="fas fa-sticky-note"></i> Add a New Note</h3>
+                        <button class="close-modal">&times;</button>
                     </div>
-                    <div class="form-group">
-                        <label for="sticky-content">Content:</label>
-                        <textarea id="sticky-content" rows="4" placeholder="Share your thoughts anonymously..."></textarea>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="sticky-category">Category:</label>
+                            <select id="sticky-category">
+                                <!-- Options will be populated dynamically based on the template -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sticky-content">Content:</label>
+                            <textarea id="sticky-content" rows="4"
+                                placeholder="Share your thoughts anonymously..."></textarea>
+                        </div>
+                        <button id="submit-sticky-btn" class="btn primary"><i class="fas fa-paper-plane"></i> Add
+                            Note</button>
                     </div>
-                    <button id="submit-sticky-btn" class="btn primary"><i class="fas fa-paper-plane"></i> Add Note</button>
+                </div>
+            </div>
+
+            <!-- Notification -->
+            <div id="notification" class="notification hidden"></div>
+
+            <!-- Share Dialog -->
+            <div id="share-dialog" class="share-dialog">
+                <div class="share-dialog-content">
+                    <div class="share-dialog-header">
+                        <h3><i class="fas fa-share-alt"></i> Share Retrospective Room</h3>
+                        <button id="close-share-dialog" class="close-modal"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="share-dialog-body">
+                        <p>Copy this link to share with your team members:</p>
+                        <div class="share-link-container">
+                            <input type="text" id="share-link" class="share-link" readonly>
+                            <button id="copy-share-link-btn" class="copy-share-link-btn"><i
+                                    class="fas fa-copy"></i></button>
+                        </div>
+                        <p class="share-info">When they open this link, they'll be taken directly to your Retrospective
+                            room.</p>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!-- Notification -->
-        <div id="notification" class="notification hidden"></div>
-        
-        <!-- Share Dialog -->
-        <div id="share-dialog" class="share-dialog">
-            <div class="share-dialog-content">
-                <div class="share-dialog-header">
-                    <h3><i class="fas fa-share-alt"></i> Share Retrospective Room</h3>
-                    <button id="close-share-dialog" class="close-modal"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="share-dialog-body">
-                    <p>Copy this link to share with your team members:</p>
-                    <div class="share-link-container">
-                        <input type="text" id="share-link" class="share-link" readonly>
-                        <button id="copy-share-link-btn" class="copy-share-link-btn"><i class="fas fa-copy"></i></button>
-                    </div>
-                    <p class="share-info">When they open this link, they'll be taken directly to your Retrospective room.</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Footer -->
-        <footer>
-            <p>Created for Web squad ❤️ <span id="current-year"></span></p>
-        </footer>
     </div>
+
+    <!-- Site Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-links">
+                <a href="/" class="footer-link">Home</a>
+                <a href="/retrospective" class="footer-link">Retrospective</a>
+                <a href="/planning-poker" class="footer-link">Planning Poker</a>
+            </div>
+        </div>
+    </footer>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/retrospective.js"></script>
+    <script src="js/theme-toggle.js"></script>
 </body>
-</html> 
+
+</html>

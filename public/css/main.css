@@ -1,0 +1,32 @@
+/* 
+ * Main CSS file that imports all component styles
+ * This replaces the original styles.css file
+ */
+
+/* Import variables first so they're available to all components */
+@import 'components/variables.css';
+
+/* Import base styles */
+@import 'components/base.css';
+
+/* Import layout components */
+@import 'components/header.css';
+
+/* Import form elements */
+@import 'components/forms.css';
+
+/* Import button styles */
+@import 'components/buttons.css';
+
+/* Import modal components */
+@import 'components/modals.css';
+
+/* Import notification styles */
+@import 'components/notifications.css';
+
+/* Import app-specific components */
+@import 'components/app-selection.css';
+@import 'components/poker-game.css';
+@import 'components/retrospective.css';
+@import 'components/room-info.css'; 
+@import 'components/stats-boxes.css';

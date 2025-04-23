@@ -1,0 +1,96 @@
+/* CSS Variables */
+:root {
+    /* Light Theme (default) */
+    --primary-color: #0969da;
+    --primary-hover: #0552af;
+    --primary-light: #dff7ff;
+    --secondary-color: #6e7781;
+
+    --danger-color: #cf222e;
+    --success-color: #2da44e;
+    --success-hover: #238636;
+    
+    --bg-color: #f6f8fa;
+    --bg-light: #ffffff;
+    --bg-card: #ffffff;
+    --bg-hover: #f3f4f6;
+    
+    --text-color: #24292f;
+    --text-light: #57606a;
+    --text-muted: #6e7781;
+    
+    --border-color: #d0d7de;
+    
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow: 0 3px 6px rgba(140, 149, 159, 0.15);
+    --shadow-lg: 0 8px 24px rgba(140, 149, 159, 0.2);
+    --shadow-hover: 0 6px 12px rgba(140, 149, 159, 0.15);
+    
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Sticky note colors - light theme */
+    --yellow-sticky: #fff8c5;
+    --blue-sticky: #ddf4ff;
+    --green-sticky: #dafbe1;
+    --red-sticky: #ffebe9;
+    --purple-sticky: #fbefff;
+
+    /* Poker card colors - light theme */
+    --poker-card-bg: white;
+    --poker-card-selected: #dafbe1;
+    --poker-card-revealed: #ddf4ff;
+    --poker-card-back: #f6f8fa;
+    --poker-card-coffee: #fbefff;
+    
+    /* Header/Footer colors */
+    --header-bg: #ffffff;
+    --header-border: #d0d7de;
+    --footer-bg: #ffffff;
+    --footer-border: #d0d7de;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+    --primary-light: #0d1117;
+    --secondary-color: #8b949e;
+
+    --danger-color: #f85149;
+    --success-color: #56d364;
+    --success-hover: #3fb950;
+    
+    --bg-color: #0d1117;
+    --bg-light: #161b22;
+    --bg-card: #21262d;
+    --bg-hover: #30363d;
+    
+    --text-color: #c9d1d9;
+    --text-light: #8b949e;
+    --text-muted: #8b949e;
+    
+    --border-color: #30363d;
+    
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+    --shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+    --shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.3);
+    
+    /* Sticky note colors - dark theme */
+    --yellow-sticky: #665c17;
+    --blue-sticky: #1a3b5c;
+    --green-sticky: #133d29;
+    --red-sticky: #582424;
+    --purple-sticky: #3b2150;
+
+    /* Poker card colors - dark theme */
+    --poker-card-bg: #21262d;
+    --poker-card-selected: #0a3622;
+    --poker-card-revealed: #051938;
+    --poker-card-back: #30363d;
+    --poker-card-coffee: #271344;
+    
+    /* Header/Footer colors */
+    --header-bg: #161b22;
+    --header-border: #30363d;
+    --footer-bg: #161b22;
+    --footer-border: #30363d;
+} 

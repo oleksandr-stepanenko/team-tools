@@ -1,0 +1,461 @@
+/* Planning Poker Styles */
+#poker-welcome-section {
+    background-color: var(--bg-light);
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    max-width: 600px;
+    margin: 0 auto;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+#poker-welcome-section h2 {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin-bottom: 24px;
+    line-height: 1.4;
+    font-weight: 600;
+}
+
+#poker-name-input-section {
+    margin-bottom: 8px;
+}
+
+.room-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+
+.room-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Active poker room section styling */
+#active-poker-room-section {
+    background: linear-gradient(45deg, var(--primary-color), var(--primary-hover));
+    color: white;
+    padding: 16px 24px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: var(--shadow);
+}
+
+#active-poker-room-section .room-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#active-poker-room-section h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.room-actions {
+    display: flex;
+    gap: 8px;
+}
+
+#copy-poker-room-btn,
+#share-poker-room-btn {
+    background-color: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    color: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#copy-poker-room-btn:hover,
+#share-poker-room-btn:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+/* Planning Poker Board styles */
+#planning-poker-board {
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.poker-controls {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+/* Compact Layout for Planning Poker */
+.poker-controls.compact {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 30px;
+    align-items: start;
+}
+
+.poker-controls-left, .poker-controls-right {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.poker-controls-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.poker-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.poker-card {
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.25rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+    user-select: none;
+    position: relative;
+    color: var(--primary-color);
+}
+
+.poker-card:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: var(--shadow);
+    border-color: var(--primary-light);
+}
+
+.poker-card.selected {
+    background-color: var(--poker-card-selected);
+    border-color: var(--success-color);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: var(--shadow);
+}
+
+/* Add a checkmark to selected card */
+.poker-card.selected::after {
+    content: "✓";
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 0.7em;
+    color: var(--success-color);
+    background-color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-sm);
+    animation: pop-in 0.3s ease-out;
+}
+
+@keyframes pop-in {
+    0% { transform: scale(0); opacity: 0; }
+    70% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.poker-controls.compact .poker-cards-container {
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.poker-controls.compact .poker-card {
+    height: 90px;
+    font-size: 1.75rem;
+}
+
+.poker-participants {
+    background-color: var(--bg-light);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.poker-participants h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.participants-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.participant-item {
+    background-color: var(--bg-color);
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: var(--transition);
+}
+
+.participant-item:hover {
+    transform: translateX(2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.participant-name {
+    font-weight: 500;
+}
+
+.participant-status {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--border-color);
+}
+
+.participant-status.voted {
+    background-color: var(--success-color);
+    box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
+}
+
+.participant-status.not-voted {
+    background-color: var(--danger-color);
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.participant-card {
+    width: 32px;
+    height: 48px;
+    background-color: var(--poker-card-back);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin-left: auto;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+}
+
+.participant-card.face-down {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    color: transparent;
+}
+
+.participant-card.face-up {
+    background-color: var(--poker-card-revealed);
+    color: var(--text-color);
+    transform: rotateY(0deg);
+}
+
+.poker-results {
+    background-color: var(--bg-light);
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: var(--shadow);
+    margin-top: 24px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.poker-results h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.results-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.result-item {
+    background-color: var(--bg-color);
+    padding: 16px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition);
+}
+
+.result-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.result-name {
+    font-weight: 500;
+}
+
+.result-value {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--primary-color);
+}
+
+.results-summary {
+    background: linear-gradient(to right, var(--blue-sticky), #c7d9fb);
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.summary-title {
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text-color);
+}
+
+.summary-stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+}
+
+.summary-stat {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    opacity: 0.8;
+    font-weight: 500;
+}
+
+/* More compact participants panel */
+.poker-controls.compact .poker-participants {
+    padding: 20px;
+}
+
+.poker-controls.compact .participants-list {
+    gap: 8px;
+}
+
+.poker-controls.compact .participant-card {
+    width: 24px;
+    height: 36px;
+    font-size: 0.9rem;
+}
+
+/* Make results more compact */
+.poker-controls.compact .results-summary {
+    padding: 16px;
+}
+
+.poker-controls.compact .summary-title {
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.poker-controls.compact .stat-label {
+    font-size: 0.8rem;
+}
+
+.poker-controls.compact .poker-results {
+    margin-top: 0;
+    padding: 20px;
+}
+
+.poker-controls.compact .results-list {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.poker-controls.compact .result-item {
+    padding: 12px;
+}
+
+.poker-controls.compact .poker-participants h3,
+.poker-controls.compact .poker-results h3 {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+}
+
+.poker-controls.compact .participant-item {
+    padding: 10px 12px;
+    gap: 8px;
+}
+
+.poker-controls.compact .summary-stats {
+    gap: 20px;
+}
+
+.poker-controls.compact .stat-value {
+    font-size: 1.4rem;
+}
+
+/* Coffee card styling */
+.poker-card[data-value="coffee"] {
+    background-color: var(--poker-card-coffee);
+    font-size: 1.75rem;
+}
+
+.poker-card[data-value="coffee"]:hover {
+    background-color: #e9d5ff;
+}
+
+/* Responsive poker styles */
+@media (max-width: 768px) {
+    .poker-card[data-value="coffee"] {
+        font-size: 1.5rem;
+    }
+    
+    .poker-controls.compact .poker-card[data-value="coffee"] {
+        font-size: 1.25rem;
+    }
+    
+    #poker-welcome-section {
+        padding: 30px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .poker-controls.compact .poker-cards-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .poker-controls.compact .poker-card {
+        height: 70px;
+    }
+    
+    .poker-controls-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .poker-controls.compact .results-list {
+        grid-template-columns: 1fr;
+    }
+} 

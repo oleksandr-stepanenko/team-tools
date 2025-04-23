@@ -1,0 +1,169 @@
+/* Modal and Dialog Styles */
+
+/* Generic Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition);
+}
+
+.modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background-color: var(--bg-light);
+    width: 90%;
+    max-width: 550px;
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+    transform: scale(0.95);
+    transition: var(--transition);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.modal:not(.hidden) .modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    padding: 24px 28px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal-header h3 i {
+    color: var(--primary-color);
+}
+
+.modal-body {
+    padding: 28px;
+}
+
+/* Share Dialog Styles */
+.share-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition);
+}
+
+.share-dialog.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.share-dialog-content {
+    background-color: var(--bg-color);
+    width: 90%;
+    max-width: 500px;
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+    padding: 28px;
+    transform: scale(0.95);
+    transition: var(--transition);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.share-dialog.show .share-dialog-content {
+    transform: scale(1);
+}
+
+.share-dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.share-dialog-header h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.share-dialog-body p {
+    margin-bottom: 16px;
+    color: var(--text-color);
+}
+
+.share-info {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-top: 16px;
+    line-height: 1.5;
+}
+
+/* Close Button for Modals and Dialogs */
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-light);
+    transition: var(--transition);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.close-modal:hover {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* Responsive modal styles */
+@media (max-width: 767px) {
+    .modal-header {
+        padding: 20px;
+    }
+    
+    .modal-body {
+        padding: 20px;
+    }
+} 

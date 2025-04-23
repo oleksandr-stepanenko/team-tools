@@ -1,0 +1,140 @@
+/* Form Styles */
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: var(--transition);
+    background-color: var(--bg-color);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.form-group select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236366f1' width='18px' height='18px'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+}
+
+/* Input styles for specific components */
+#user-name-input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: var(--transition);
+    margin-bottom: 24px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+#user-name-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.join-room-container {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+#poker-room-id-input,
+#room-id-input {
+    flex: 1;
+    padding: 14px 18px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: var(--transition);
+    background-color: var(--bg-color);
+}
+
+#poker-room-id-input:focus,
+#room-id-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Share link input styles */
+.share-link-container {
+    display: flex;
+    background-color: var(--bg-color);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    border: 1px solid var(--border-color);
+}
+
+.share-link {
+    flex: 1;
+    padding: 14px 16px;
+    border: none;
+    background-color: var(--bg-color);
+    font-size: 0.95rem;
+    color: var(--text-color);
+}
+
+.share-link:focus {
+    outline: none;
+}
+
+.copy-share-link-btn {
+    padding: 0 20px;
+    background-color: var(--bg-color);
+    border: none;
+    border-left: 1px solid var(--border-color);
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1rem;
+}
+
+.copy-share-link-btn:hover {
+    background-color: var(--border-color);
+}
+
+.copy-share-link-btn.copied {
+    color: var(--success-color);
+}
+
+/* Responsive form styles */
+@media (max-width: 480px) {
+    .join-room-container {
+        flex-direction: column;
+    }
+} 

@@ -3,18 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team Collaboration Tools</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Compass</title>
+    <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Team Collaboration Tools</h1>
-            
+    <!-- Site Header with Navigation -->
+    <header class="site-header">
+        <div class="header-container">
+            <a href="/" class="site-logo">
+                <i class="fas fa-compass"></i>
+                <span>Compass</span>
+            </a>
+            <nav class="site-nav">
+                <a href="/" class="nav-link active">Home</a>
+                <a href="/retrospective" class="nav-link">Retrospective</a>
+                <a href="/planning-poker" class="nav-link">Planning Poker</a>
+                <div class="theme-toggle-wrapper">
+                    <label class="theme-toggle">
+                        <span class="toggle-icons">
+                            <i class="fas fa-sun"></i>
+                            <i class="fas fa-moon"></i>
+                        </span>
+                        <input type="checkbox" id="theme-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="content-wrapper">
+        <div class="container">
             <!-- App Selection Section -->
             <div id="app-selection" class="app-selection">
                 <p class="welcome-text">Choose the collaboration tool you need</p>
@@ -37,17 +60,20 @@
                     </div>
                 </div>
             </div>
-        </header>
-        
-        <!-- Footer -->
-        <footer>
-            <p>Created for Web squad ❤️ <span id="current-year"></span></p>
-        </footer>
+        </div>
     </div>
+    
+    <!-- Site Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-links">
+                <a href="/" class="footer-link">Home</a>
+                <a href="/retrospective" class="footer-link">Retrospective</a>
+                <a href="/planning-poker" class="footer-link">Planning Poker</a>
+            </div>
+        </div>
+    </footer>
 
-    <script>
-        // Set the current year in the footer
-        document.getElementById('current-year').textContent = new Date().getFullYear();
-    </script>
+    <script src="js/theme-toggle.js"></script>
 </body>
 </html> 

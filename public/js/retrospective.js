@@ -78,11 +78,6 @@ const columnDescriptions = {
     'longed-for': 'Wishes and desires for the future'
 };
 
-// Initialize footer year
-function initFooter() {
-    currentYearSpan.textContent = new Date().getFullYear();
-}
-
 // Event Listeners
 showTemplateBtn.addEventListener('click', showTemplateSelection);
 joinRoomBtn.addEventListener('click', joinRoom);
@@ -99,7 +94,6 @@ submitStickyBtn.addEventListener('click', submitSticky);
 
 // Initialize app
 function init() {
-    initFooter();
     checkURLParams();
 }
 
@@ -395,8 +389,12 @@ function enterRoom(roomId, roomData) {
     // Switch UI elements
     welcomeSection.classList.add('hidden');
     templateSelectionSection.classList.add('hidden');
+    roomInfo.classList.add('hidden');
     activeRoomSection.classList.remove('hidden');
     retrospectiveBoard.classList.remove('hidden');
+    
+    // Show the floating Add Note button
+    addStickyBtn.classList.remove('hidden');
     
     // Render the correct template columns
     if (roomData && roomData.template) {
@@ -568,4 +566,4 @@ socket.on('error', (errorMessage) => {
 
 socket.on('disconnect', () => {
     showNotification('Connection lost. Please refresh the page.', true);
-}); 
+});
