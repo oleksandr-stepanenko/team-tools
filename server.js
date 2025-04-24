@@ -85,7 +85,29 @@ io.on('connection', (socket) => {
     }
     
     socket.join(roomId);
+    
+    // Track active users count
+    if (!rooms[roomId].activeUsers) {
+      rooms[roomId].activeUsers = new Set();
+    }
+    rooms[roomId].activeUsers.add(socket.id);
+    
+    // Send room data to the joining user
     socket.emit('room-joined', roomId, rooms[roomId]);
+    
+    // Notify all users in the room about the updated active user count
+    io.to(roomId).emit('active-users-updated', rooms[roomId].activeUsers.size);
+  });
+
+  // Leave a room (called when user navigates away or explicitly leaves)
+  socket.on('leave-room', (roomId) => {
+    if (rooms[roomId] && rooms[roomId].activeUsers) {
+      socket.leave(roomId);
+      rooms[roomId].activeUsers.delete(socket.id);
+      
+      // Notify remaining users about the updated count
+      io.to(roomId).emit('active-users-updated', rooms[roomId].activeUsers.size);
+    }
   });
 
   // Add a sticky note
@@ -287,6 +309,13 @@ io.on('connection', (socket) => {
     Object.keys(rooms).forEach(roomId => {
       if (rooms[roomId].votes && rooms[roomId].votes[socket.id]) {
         delete rooms[roomId].votes[socket.id];
+      }
+      
+      // Update active users count when a user disconnects
+      if (rooms[roomId].activeUsers && rooms[roomId].activeUsers.has(socket.id)) {
+        rooms[roomId].activeUsers.delete(socket.id);
+        // Notify remaining users about the updated count
+        io.to(roomId).emit('active-users-updated', rooms[roomId].activeUsers.size);
       }
     });
     

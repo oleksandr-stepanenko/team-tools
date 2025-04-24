@@ -40,15 +40,29 @@
 
     <div class="content-wrapper">
         <div class="container">
-            <div id="active-room-section" class="hidden">
-                <div class="room-header">
-                    <h2><i class="fas fa-door-open"></i> Room: <span id="current-room-id"></span></h2>
-                    <div class="room-actions">
-                        <button id="copy-room-btn" class="btn small"><i class="fas fa-copy"></i> Copy</button>
-                        <button id="share-room-btn" class="btn small"><i class="fas fa-share-alt"></i> Share</button>
+            <div id="retrospective-container">
+                <!-- Hot Topics Section - Will display top 5 voted sticky notes -->
+                <div id="hot-topics-section">
+                    <h3><i class="fas fa-fire"></i> Hot Topics</h3>
+                    <div id="hot-topics-list">
+                        <!-- Hot topics will be dynamically added here -->
+                        <div class="hot-topics-empty">Vote on sticky notes to see hot topics</div>
+                    </div>
+                </div>
+                <div id="active-room-section" class="hidden">
+                    <div class="room-header">
+                        <h2><i class="fas fa-door-open"></i> Room: <span id="current-room-id"></span></h2>
+                        <div class="room-actions">
+                            <div class="active-users-counter">
+                                <i class="fas fa-users"></i> <span id="active-users-count">1</span> active
+                            </div>
+                            <button id="copy-room-btn" class="btn small"><i class="fas fa-copy"></i> Copy</button>
+                            <button id="share-room-btn" class="btn small"><i class="fas fa-share-alt"></i> Share</button>
+                        </div>
                     </div>
                 </div>
             </div>
+            
             <!-- Retrospective Room Info -->
             <div id="room-info">
                 <div id="welcome-section">

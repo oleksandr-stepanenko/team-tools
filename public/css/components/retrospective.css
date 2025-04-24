@@ -9,6 +9,33 @@
     border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+/* Active users counter */
+.active-users-counter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 16px;
+    background-color: var(--bg-hover);
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.active-users-counter i {
+    color: var(--primary-color);
+}
+
+#active-users-count {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.room-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 #welcome-section {
     text-align: center;
 }
@@ -601,4 +628,137 @@
     font-style: italic;
     opacity: 0.6;
     pointer-events: none;
+}
+
+#retrospective-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* Hot Topics Section */
+#active-room-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    gap: 24px;
+    flex-wrap: wrap;
+    height: fit-content;
+}
+
+#hot-topics-section {
+    background-color: var(--bg-light);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: var(--shadow);
+}
+
+#hot-topics-section h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary-color);
+}
+
+#hot-topics-section h3 i {
+    color: #e25822;
+}
+
+#hot-topics-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.hot-topics-empty {
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 12px 0;
+}
+
+.hot-topic-item {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: var(--bg-hover);
+    transition: var(--transition);
+}
+
+.hot-topic-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.hot-topic-votes {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 16px;
+    min-width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.hot-topic-content {
+    flex: 1;
+    font-size: 0.9rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+}
+
+.hot-topic-category {
+    font-size: 0.75rem;
+    border-radius: 12px;
+    padding: 2px 8px;
+    align-self: center;
+}
+
+.hot-topic-category[data-category="went-well"],
+.hot-topic-category[data-category="continue"],
+.hot-topic-category[data-category="liked"] {
+    background-color: var(--green-sticky);
+}
+
+.hot-topic-category[data-category="to-improve"],
+.hot-topic-category[data-category="start"],
+.hot-topic-category[data-category="learned"] {
+    background-color: var(--blue-sticky);
+}
+
+.hot-topic-category[data-category="ideas"],
+.hot-topic-category[data-category="lacked"] {
+    background-color: var(--yellow-sticky);
+}
+
+.hot-topic-category[data-category="stop"],
+.hot-topic-category[data-category="longed-for"] {
+    background-color: var(--purple-sticky);
+}
+
+/* Responsive styles for hot topics */
+@media (max-width: 991px) {
+    #active-room-section {
+        flex-direction: column;
+    }
+    
+    #hot-topics-section {
+        flex: 0 0 auto;
+        width: 100%;
+    }
 } 

@@ -23,6 +23,8 @@ const stickyContent = document.getElementById('sticky-content');
 const roomInfo = document.getElementById('room-info');
 const notification = document.getElementById('notification');
 const currentYearSpan = document.getElementById('current-year');
+const activeUsersCount = document.getElementById('active-users-count');
+const hotTopicsList = document.getElementById('hot-topics-list');
 
 // Share dialog elements
 const shareDialog = document.getElementById('share-dialog');
@@ -96,6 +98,16 @@ submitStickyBtn.addEventListener('click', submitSticky);
 // Initialize app
 function init() {
     checkURLParams();
+    
+    // Add unload event handler to handle user leaving the page
+    window.addEventListener('beforeunload', handlePageUnload);
+}
+
+// Handle page unload to notify server that user is leaving
+function handlePageUnload() {
+    if (currentRoomId) {
+        socket.emit('leave-room', currentRoomId);
+    }
 }
 
 // Function to update column layout class based on number of columns
@@ -412,6 +424,9 @@ function enterRoom(roomId, roomData) {
         });
     }
     
+    // Update hot topics after loading all stickies
+    updateHotTopics();
+    
     showNotification(`Joined room: ${roomId}`);
 }
 
@@ -517,7 +532,90 @@ function updateStickyVotes(stickyId, votes) {
                 voteCount.style.transform = 'scale(1)';
             }, 10);
         }
+        
+        // Update hot topics when a vote changes
+        updateHotTopics();
     }
+}
+
+// Function to update hot topics
+function updateHotTopics() {
+    // Collect all sticky notes
+    const stickies = [];
+    const stickyElements = document.querySelectorAll('.sticky-note');
+    
+    stickyElements.forEach(element => {
+        const id = element.dataset.id;
+        const category = element.dataset.category;
+        const voteCount = parseInt(element.querySelector('.vote-count').textContent) || 0;
+        const content = element.querySelector('.sticky-content').textContent;
+        
+        stickies.push({ id, category, voteCount, content });
+    });
+    
+    // Sort by vote count in descending order
+    stickies.sort((a, b) => b.voteCount - a.voteCount);
+    
+    // Take the top 5
+    const topStickies = stickies.slice(0, 5);
+    
+    // Update the hot topics list
+    renderHotTopics(topStickies);
+}
+
+// Function to render hot topics
+function renderHotTopics(topStickies) {
+    // Clear the list first
+    hotTopicsList.innerHTML = '';
+    
+    // If no sticky notes with votes, show empty message
+    if (topStickies.length === 0 || (topStickies.length > 0 && topStickies[0].voteCount === 0)) {
+        hotTopicsList.innerHTML = '<div class="hot-topics-empty">Vote on sticky notes to see hot topics</div>';
+        return;
+    }
+    
+    // Create elements for each hot topic
+    topStickies.forEach(sticky => {
+        // Skip items with 0 votes
+        if (sticky.voteCount === 0) return;
+        
+        const topicElement = document.createElement('div');
+        topicElement.className = 'hot-topic-item';
+        topicElement.dataset.id = sticky.id;
+        
+        const truncatedContent = sticky.content.length > 60 ? 
+            sticky.content.substring(0, 57) + '...' : 
+            sticky.content;
+            
+        // Get category title for display
+        const categoryTitle = columnTitles[sticky.category] || sticky.category;
+        
+        topicElement.innerHTML = `
+            <div class="hot-topic-votes">${sticky.voteCount}</div>
+            <span class="hot-topic-content">${escapeHTML(truncatedContent)}</span>
+            <span class="hot-topic-category" data-category="${sticky.category}">${categoryTitle}</span>
+        `;
+        
+        // Add click handler to jump to the sticky note
+        topicElement.addEventListener('click', () => {
+            const targetSticky = document.querySelector(`.sticky-note[data-id="${sticky.id}"]`);
+            if (targetSticky) {
+                targetSticky.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // Add a highlight effect
+                targetSticky.style.transform = 'scale(1.05)';
+                targetSticky.style.boxShadow = 'var(--shadow-lg)';
+                
+                setTimeout(() => {
+                    targetSticky.style.transition = 'transform 0.5s ease, box-shadow 0.5s ease';
+                    targetSticky.style.transform = '';
+                    targetSticky.style.boxShadow = '';
+                }, 1500);
+            }
+        });
+        
+        hotTopicsList.appendChild(topicElement);
+    });
 }
 
 function showNotification(message, isError = false) {
@@ -571,9 +669,14 @@ socket.on('room-joined', (roomId, roomData) => {
     enterRoom(roomId, roomData);
 });
 
+socket.on('active-users-updated', (count) => {
+    updateActiveUsersCount(count);
+});
+
 socket.on('sticky-added', (sticky) => {
     addStickyToBoard(sticky);
     showNotification('New sticky note added!');
+    updateHotTopics(); // Update hot topics when a new sticky is added
 });
 
 socket.on('sticky-voted', (stickyId, votes) => {
@@ -583,6 +686,30 @@ socket.on('sticky-voted', (stickyId, votes) => {
 socket.on('sticky-deleted', (stickyId) => {
     removeSticky(stickyId);
     showNotification('Note has been deleted');
+    // Update hot topics after a short delay to ensure the sticky is removed
+    setTimeout(updateHotTopics, 350);
+});
+
+socket.on('sticky-moved', (stickyId, newCategory) => {
+    // Update the UI to reflect the move
+    const stickyElement = document.querySelector(`.sticky-note[data-id="${stickyId}"]`);
+    if (stickyElement) {
+        // Update the data attribute
+        stickyElement.dataset.category = newCategory;
+        
+        // Find the correct container
+        const newContainer = document.getElementById(`${newCategory}-container`);
+        if (newContainer && !newContainer.contains(stickyElement)) {
+            // If the sticky isn't already in the container, move it
+            newContainer.appendChild(stickyElement);
+            
+            // Show a notification
+            showNotification('Sticky note moved to a different column');
+            
+            // Update hot topics after a category change
+            updateHotTopics();
+        }
+    }
 });
 
 socket.on('connect', () => {
@@ -761,21 +888,14 @@ function moveSticky(stickyId, newCategory) {
     }
 }
 
-socket.on('sticky-moved', (stickyId, newCategory) => {
-    // Update the UI to reflect the move
-    const stickyElement = document.querySelector(`.sticky-note[data-id="${stickyId}"]`);
-    if (stickyElement) {
-        // Update the data attribute
-        stickyElement.dataset.category = newCategory;
-        
-        // Find the correct container
-        const newContainer = document.getElementById(`${newCategory}-container`);
-        if (newContainer && !newContainer.contains(stickyElement)) {
-            // If the sticky isn't already in the container, move it
-            newContainer.appendChild(stickyElement);
-            
-            // Show a notification
-            showNotification('Sticky note moved to a different column');
-        }
-    }
-});
+// Function to update active users count display
+function updateActiveUsersCount(count) {
+    activeUsersCount.textContent = count;
+    
+    // Add animation to highlight the change
+    activeUsersCount.style.transform = 'scale(1.2)';
+    setTimeout(() => {
+        activeUsersCount.style.transition = 'transform 0.3s ease';
+        activeUsersCount.style.transform = 'scale(1)';
+    }, 10);
+}

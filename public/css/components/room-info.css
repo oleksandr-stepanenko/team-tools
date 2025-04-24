@@ -1,8 +1,5 @@
 /* Room info styles for compact display in corner */
 #active-room-section {
-    position: relative;
-    margin-left: auto;
-    width: auto;
     max-width: 300px;
     background-color: var(--bg-card);
     border-radius: 8px;
