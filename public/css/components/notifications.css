@@ -45,6 +45,5 @@
 
 .consensus-match {
     animation: consensus-highlight 1.5s ease-in-out;
-    background-color: #dcfce7 !important;
     border-color: var(--success-color) !important;
 } 

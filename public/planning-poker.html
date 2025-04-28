@@ -40,8 +40,15 @@
 
     <div class="content-wrapper">
         <div class="container">
-            <h1>Planning Poker</h1>
-
+            <div id="active-poker-room-section" class="hidden">
+                <div class="room-header">
+                    <h2><i class="fas fa-door-open"></i> Poker Room: <span id="current-poker-room-id"></span></h2>
+                    <div class="room-actions">
+                        <button id="copy-room-btn" class="btn small"><i class="fas fa-copy"></i> Copy</button>
+                        <button id="share-room-btn" class="btn small"><i class="fas fa-share-alt"></i> Share</button>
+                    </div>
+                </div>
+            </div>
             <!-- Planning Poker Room Info -->
             <div id="poker-room-info">
                 <div id="poker-welcome-section">
@@ -62,15 +69,6 @@
                         </div>
                     </div>
                 </div>
-                <div id="active-poker-room-section" class="hidden">
-                    <div class="room-header">
-                        <h2><i class="fas fa-door-open"></i> Poker Room: <span id="current-poker-room-id"></span></h2>
-                        <div class="room-actions">
-                            <button id="copy-poker-room-btn" class="btn small"><i class="fas fa-copy"></i> Copy</button>
-                            <button id="share-poker-room-btn" class="btn small"><i class="fas fa-share-alt"></i> Share</button>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- Planning Poker Board -->
@@ -86,7 +84,7 @@
                             <div class="poker-card" data-value="13">13</div>
                             <div class="poker-card" data-value="21">21</div>
                             <div class="poker-card" data-value="?">?</div>
-                            <div class="poker-card" data-value="coffee">☕</div>
+                            <div class="poker-card" data-value="☕">☕</div>
                         </div>
 
                         <div class="poker-results hidden" id="poker-results">

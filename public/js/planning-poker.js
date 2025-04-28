@@ -9,8 +9,8 @@ const createPokerRoomBtn = document.getElementById('create-poker-room-btn');
 const joinPokerRoomBtn = document.getElementById('join-poker-room-btn');
 const pokerRoomIdInput = document.getElementById('poker-room-id-input');
 const currentPokerRoomIdSpan = document.getElementById('current-poker-room-id');
-const copyPokerRoomBtn = document.getElementById('copy-poker-room-btn');
-const sharePokerRoomBtn = document.getElementById('share-poker-room-btn');
+const copyPokerRoomBtn = document.getElementById('copy-room-btn');
+const sharePokerRoomBtn = document.getElementById('share-room-btn');
 const activePokerRoomSection = document.getElementById('active-poker-room-section');
 const planningPokerBoard = document.getElementById('planning-poker-board');
 const pokerCards = document.querySelectorAll('.poker-card');
@@ -163,7 +163,7 @@ function copyPokerRoomId() {
             // Visual feedback on the button
             copyPokerRoomBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
             setTimeout(() => {
-                copyPokerRoomBtn.innerHTML = '<i class="fas fa-copy"></i> Copy ID';
+                copyPokerRoomBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
             }, 2000);
         })
         .catch(err => {
@@ -357,7 +357,7 @@ function displayResults(results) {
         .filter(v => !isNaN(v));
     
     // Check for consensus (everyone voted the same)
-    const uniqueVotes = new Set(voteValues);
+    const uniqueVotes = new Set(numericVotes);
     const hasConsensus = uniqueVotes.size === 1 && voteValues.length > 1;
     
     // Skip calculation if no valid numeric votes

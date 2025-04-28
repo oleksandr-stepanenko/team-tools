@@ -24,6 +24,7 @@ const roomInfo = document.getElementById('room-info');
 const notification = document.getElementById('notification');
 const currentYearSpan = document.getElementById('current-year');
 const activeUsersCount = document.getElementById('active-users-count');
+const hotTopicsSection = document.getElementById('hot-topics-section');
 const hotTopicsList = document.getElementById('hot-topics-list');
 
 // Share dialog elements
@@ -207,7 +208,7 @@ function copyRoomId() {
             // Visual feedback on the button
             copyRoomBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
             setTimeout(() => {
-                copyRoomBtn.innerHTML = '<i class="fas fa-copy"></i> Copy ID';
+                copyRoomBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
             }, 2000);
         })
         .catch(err => {
@@ -408,6 +409,7 @@ function enterRoom(roomId, roomData) {
     roomInfo.classList.add('hidden');
     activeRoomSection.classList.remove('hidden');
     retrospectiveBoard.classList.remove('hidden');
+    hotTopicsSection.classList.remove('hidden');
     
     // Show the floating Add Note button
     addStickyBtn.classList.remove('hidden');
@@ -425,7 +427,9 @@ function enterRoom(roomId, roomData) {
     }
     
     // Update hot topics after loading all stickies
-    updateHotTopics();
+    setTimeout(() => {
+        updateHotTopics();
+    }, 500); // Small delay to ensure all stickies are properly loaded
     
     showNotification(`Joined room: ${roomId}`);
 }
@@ -477,6 +481,14 @@ function addStickyToBoard(sticky) {
     const voteBtn = stickyElement.querySelector('.vote-btn');
     voteBtn.addEventListener('click', () => {
         socket.emit('vote-sticky', currentRoomId, sticky.id);
+        
+        // Optimistic update for better UX
+        const currentVotes = parseInt(voteBtn.querySelector('.vote-count').textContent) || 0;
+        const newVotes = currentVotes + 1; // Assuming toggling adds a vote for simplicity
+        voteBtn.querySelector('.vote-count').textContent = newVotes;
+        
+        // Update hot topics immediately for responsiveness
+        setTimeout(updateHotTopics, 50);
     });
     
     // Add delete event listener
@@ -538,8 +550,8 @@ function updateStickyVotes(stickyId, votes) {
     }
 }
 
-// Function to update hot topics
-function updateHotTopics() {
+// Add debug call after hot topics update
+function updateHotTopics() {    
     // Collect all sticky notes
     const stickies = [];
     const stickyElements = document.querySelectorAll('.sticky-note');
@@ -547,8 +559,10 @@ function updateHotTopics() {
     stickyElements.forEach(element => {
         const id = element.dataset.id;
         const category = element.dataset.category;
-        const voteCount = parseInt(element.querySelector('.vote-count').textContent) || 0;
-        const content = element.querySelector('.sticky-content').textContent;
+        const voteCountElement = element.querySelector('.vote-count');
+        const voteCount = voteCountElement ? parseInt(voteCountElement.textContent) || 0 : 0;
+        const contentElement = element.querySelector('.sticky-content');
+        const content = contentElement ? contentElement.textContent : '';
         
         stickies.push({ id, category, voteCount, content });
     });
@@ -558,14 +572,22 @@ function updateHotTopics() {
     
     // Take the top 5
     const topStickies = stickies.slice(0, 5);
-    
+
     // Update the hot topics list
     renderHotTopics(topStickies);
 }
 
 // Function to render hot topics
 function renderHotTopics(topStickies) {
+    // Ensure hot topics section is visible
+    hotTopicsSection.classList.remove('hidden');
+    
     // Clear the list first
+    if (!hotTopicsList) {
+        console.error('hotTopicsList element not found');
+        return;
+    }
+    
     hotTopicsList.innerHTML = '';
     
     // If no sticky notes with votes, show empty message
@@ -681,6 +703,8 @@ socket.on('sticky-added', (sticky) => {
 
 socket.on('sticky-voted', (stickyId, votes) => {
     updateStickyVotes(stickyId, votes);
+    // Explicitly call updateHotTopics after a vote is registered
+    updateHotTopics();
 });
 
 socket.on('sticky-deleted', (stickyId) => {
@@ -810,6 +834,7 @@ function handleDragEnd(e) {
     document.querySelectorAll('.sticky-container').forEach(container => {
         container.classList.remove('drag-over');
     });
+    updateHotTopics();
 }
 
 function handleDragOver(e) {
