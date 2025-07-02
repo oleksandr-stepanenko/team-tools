@@ -810,21 +810,41 @@ class TimerManager {
         try {
             // Create audio context for notification sound
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
             
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
+            // Create a pleasant chime sound with multiple harmonious tones
+            const playTone = (frequency, startTime, duration, volume = 0.15) => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Use sine wave for a softer, more pleasant tone
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(frequency, startTime);
+                
+                // Smooth attack and decay for a gentle chime effect
+                gainNode.gain.setValueAtTime(0, startTime);
+                gainNode.gain.linearRampToValueAtTime(volume, startTime + 0.05); // Quick attack
+                gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + duration); // Gentle decay
+                
+                oscillator.start(startTime);
+                oscillator.stop(startTime + duration);
+            };
             
-            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-            oscillator.frequency.setValueAtTime(600, audioContext.currentTime + 0.1);
-            oscillator.frequency.setValueAtTime(800, audioContext.currentTime + 0.2);
+            const currentTime = audioContext.currentTime;
             
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            // Create a pleasant 4-note chime sequence (C major arpeggio)
+            // C5 = 523.25 Hz, E5 = 659.25 Hz, G5 = 783.99 Hz, C6 = 1046.50 Hz
+            playTone(523.25, currentTime, 0.8, 0.12);         // C5
+            playTone(659.25, currentTime + 0.15, 0.7, 0.10);  // E5
+            playTone(783.99, currentTime + 0.3, 0.6, 0.08);   // G5
+            playTone(1046.50, currentTime + 0.45, 0.8, 0.10); // C6
             
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.3);
+            // Add subtle harmony with softer background notes
+            playTone(261.63, currentTime, 1.2, 0.04);         // C4 (octave lower)
+            playTone(392.00, currentTime + 0.2, 1.0, 0.03);   // G4 (harmony)
+            
         } catch (error) {
             // Fallback: no sound if audio context fails
             console.log('Could not play notification sound:', error);
