@@ -231,7 +231,7 @@ function setButtonLoadingState(button, isLoading, loadingText = 'Loading...', or
  */
 function resetButtonAfterTimeout(button, checkText, resetText, timeout = RETROSPECTIVE_CONFIG.TIMEOUTS.BUTTON_RESET) {
     setTimeout(() => {
-        if (button && button.innerHTML.includes(checkText)) {
+        if (button?.innerHTML?.includes(checkText)) {
             button.innerHTML = resetText;
             button.disabled = false;
         }
@@ -315,6 +315,107 @@ function copyToClipboard(text, button, successIcon, originalIcon, notificationCa
 function truncateText(text, maxLength = RETROSPECTIVE_CONFIG.HOT_TOPICS.CONTENT_TRUNCATE_LENGTH) {
     return text.length > maxLength ? text.substring(0, maxLength - 3) + '...' : text;
 }
+
+/**
+ * Local Storage utilities for tracking user's stickies
+ */
+const LocalStorageUtils = {
+    STORAGE_KEY: 'retro-board-my-stickies',
+    
+    /**
+     * Get all saved sticky IDs for all rooms
+     * @returns {Object} Object with roomId as key and array of stickyIds as value
+     */
+    getAllMyStickies() {
+        try {
+            const data = localStorage.getItem(this.STORAGE_KEY);
+            return data ? JSON.parse(data) : {};
+        } catch (error) {
+            console.error('Error reading my stickies from localStorage:', error);
+            return {};
+        }
+    },
+    
+    /**
+     * Get saved sticky IDs for a specific room
+     * @param {string} roomId - Room ID
+     * @returns {Array} Array of sticky IDs
+     */
+    getMyStickiesForRoom(roomId) {
+        const allStickies = this.getAllMyStickies();
+        return allStickies[roomId] || [];
+    },
+    
+    /**
+     * Save a sticky ID for a specific room
+     * @param {string} roomId - Room ID
+     * @param {string} stickyId - Sticky ID to save
+     */
+    saveMySticky(roomId, stickyId) {
+        try {
+            const allStickies = this.getAllMyStickies();
+            
+            if (!allStickies[roomId]) {
+                allStickies[roomId] = [];
+            }
+            
+            if (!allStickies[roomId].includes(stickyId)) {
+                allStickies[roomId].push(stickyId);
+                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(allStickies));
+            }
+        } catch (error) {
+            console.error('Error saving sticky to localStorage:', error);
+        }
+    },
+    
+    /**
+     * Remove a sticky ID from a specific room (when deleted)
+     * @param {string} roomId - Room ID
+     * @param {string} stickyId - Sticky ID to remove
+     */
+    removeMySticky(roomId, stickyId) {
+        try {
+            const allStickies = this.getAllMyStickies();
+            
+            if (allStickies[roomId]) {
+                allStickies[roomId] = allStickies[roomId].filter(id => id !== stickyId);
+                
+                // Clean up empty room entries
+                if (allStickies[roomId].length === 0) {
+                    delete allStickies[roomId];
+                }
+                
+                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(allStickies));
+            }
+        } catch (error) {
+            console.error('Error removing sticky from localStorage:', error);
+        }
+    },
+    
+    /**
+     * Clean up stickies that no longer exist in the room
+     * @param {string} roomId - Room ID
+     * @param {Array} existingStickyIds - Array of sticky IDs that currently exist
+     */
+    cleanupStickies(roomId, existingStickyIds) {
+        try {
+            const myStickies = this.getMyStickiesForRoom(roomId);
+            const validStickies = myStickies.filter(id => existingStickyIds.includes(id));
+            
+            if (validStickies.length !== myStickies.length) {
+                const allStickies = this.getAllMyStickies();
+                if (validStickies.length === 0) {
+                    delete allStickies[roomId];
+                } else {
+                    allStickies[roomId] = validStickies;
+                }
+                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(allStickies));
+            }
+        } catch (error) {
+            console.error('Error cleaning up stickies in localStorage:', error);
+        }
+    }
+};
 
 // ============================================================================
 // HELPER CLASSES SECTION
@@ -550,6 +651,20 @@ class StickyNoteManager {
         stickyElement.dataset.id = sticky.id;
         stickyElement.dataset.category = sticky.category;
         
+        // Check if this sticky was created by the current user
+        // Either in current session (createdBy matches socket.id) or in previous sessions (saved in localStorage)
+        const isMySticky = (sticky.createdBy && sticky.createdBy === this.socket.id) || 
+                          (this.state.currentRoomId && LocalStorageUtils.getMyStickiesForRoom(this.state.currentRoomId).includes(sticky.id));
+        
+        if (isMySticky) {
+            stickyElement.classList.add('my-sticky');
+            
+            // Save to localStorage if it was created in current session
+            if (sticky.createdBy && sticky.createdBy === this.socket.id && this.state.currentRoomId) {
+                LocalStorageUtils.saveMySticky(this.state.currentRoomId, sticky.id);
+            }
+        }
+        
         const formattedTime = formatTime(sticky.timestamp);
         
         stickyElement.innerHTML = `
@@ -625,8 +740,26 @@ class StickyNoteManager {
             
             setTimeout(() => {
                 stickyElement.remove();
+                
+                // Remove from localStorage when deleted
+                if (this.state.currentRoomId) {
+                    LocalStorageUtils.removeMySticky(this.state.currentRoomId, stickyId);
+                }
             }, RETROSPECTIVE_CONFIG.TIMEOUTS.STICKY_REMOVAL_ANIMATION);
         }
+    }
+    
+    /**
+     * Clean up localStorage for the current room by removing stickies that no longer exist
+     */
+    cleanupLocalStorage() {
+        if (!this.state.currentRoomId) return;
+        
+        // Get all existing sticky IDs in the current room
+        const existingStickyIds = Array.from(document.querySelectorAll('.sticky-note')).map(element => element.dataset.id);
+        
+        // Clean up localStorage
+        LocalStorageUtils.cleanupStickies(this.state.currentRoomId, existingStickyIds);
     }
     
     updateStickyVotes(stickyId, votes) {
@@ -1002,8 +1135,9 @@ function enterRoom(roomId, roomData) {
         });
     }
     
-    // Update hot topics after loading all stickies
+    // Clean up localStorage after all stickies are loaded
     setTimeout(() => {
+        stickyNoteManager.cleanupLocalStorage();
         hotTopicsManager.updateHotTopics();
     }, RETROSPECTIVE_CONFIG.TIMEOUTS.HOT_TOPICS_UPDATE_DELAY);
     

@@ -135,7 +135,8 @@ io.on('connection', (socket) => {
       content,
       category,
       votes: 0,
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      createdBy: socket.id
     };
     
     if (!rooms[roomId].stickies) {

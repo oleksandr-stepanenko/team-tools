@@ -1,7 +1,3 @@
-/* ===========================
-   HOT TOPICS SECTION
-   =========================== */
-
 #hot-topics-section {
     flex: 0 0 60%;
     background-color: var(--bg-light);
@@ -87,36 +83,36 @@
 }
 
 /* Hot topic category colors using shared variables */
+.hot-topic-category[data-category="start"],
 .hot-topic-category[data-category="went-well"],
-.hot-topic-category[data-category="continue"],
+.hot-topic-category[data-category="drop"],
 .hot-topic-category[data-category="liked"],
-.hot-topic-category[data-category="keep"],
-.hot-topic-category[data-category="accomplishments"],
-.hot-topic-category[data-category="climbing-equipment"],
-.hot-topic-category[data-category="summit"] {
+.hot-topic-category[data-category="future-considerations"],
+.hot-topic-category[data-category="boulders"] {
     background-color: var(--category-green);
 }
 
 .hot-topic-category[data-category="to-improve"],
-.hot-topic-category[data-category="start"],
+.hot-topic-category[data-category="stop"],
 .hot-topic-category[data-category="learned"],
 .hot-topic-category[data-category="add"],
-.hot-topic-category[data-category="improve"],
+.hot-topic-category[data-category="climbing-equipment"],
 .hot-topic-category[data-category="lessons-learned"] {
     background-color: var(--category-blue);
 }
 
 .hot-topic-category[data-category="ideas"],
 .hot-topic-category[data-category="lacked"],
-.hot-topic-category[data-category="future-considerations"] {
+.hot-topic-category[data-category="continue"],
+.hot-topic-category[data-category="keep"],
+.hot-topic-category[data-category="accomplishments"],
+.hot-topic-category[data-category="inclement-weather"] {
     background-color: var(--category-yellow);
 }
 
-.hot-topic-category[data-category="stop"],
 .hot-topic-category[data-category="longed-for"],
-.hot-topic-category[data-category="drop"],
+.hot-topic-category[data-category="improve"],
 .hot-topic-category[data-category="problems"],
-.hot-topic-category[data-category="boulders"],
-.hot-topic-category[data-category="inclement-weather"] {
+.hot-topic-category[data-category="summit"] {
     background-color: var(--category-purple);
 } 

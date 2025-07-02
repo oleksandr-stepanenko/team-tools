@@ -1,7 +1,3 @@
-/* ===========================
-   STICKY NOTES
-   =========================== */
-
 .sticky-note {
     background-color: var(--category-yellow);
     padding: 20px;
@@ -11,9 +7,14 @@
     transition: var(--transition);
     display: flex;
     flex-direction: column;
-    border-left: 4px solid rgba(0, 0, 0, 0.1);
     cursor: grab;
     user-select: none;
+}
+
+/* Highlight stickies created by the current user */
+.sticky-note.my-sticky {
+    border-left: 6px solid var(--primary-color);
+    border-right: 6px solid var(--primary-color);
 }
 
 .sticky-note:hover {
@@ -21,43 +22,44 @@
     box-shadow: var(--shadow);
 }
 
+.sticky-note.my-sticky:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.3), var(--shadow);
+}
+
 /* Category-specific sticky note colors */
+.sticky-note[data-category="start"],
 .sticky-note[data-category="went-well"],
-.sticky-note[data-category="continue"],
+.sticky-note[data-category="drop"],
 .sticky-note[data-category="liked"],
-.sticky-note[data-category="keep"],
-.sticky-note[data-category="accomplishments"],
-.sticky-note[data-category="climbing-equipment"],
-.sticky-note[data-category="summit"] {
+.sticky-note[data-category="future-considerations"],
+.sticky-note[data-category="boulders"] {
     background-color: var(--category-green);
-    border-left: 4px solid var(--category-green-border);
 }
 
 .sticky-note[data-category="to-improve"],
-.sticky-note[data-category="start"],
+.sticky-note[data-category="stop"],
 .sticky-note[data-category="learned"],
 .sticky-note[data-category="add"],
-.sticky-note[data-category="improve"],
+.sticky-note[data-category="climbing-equipment"],
 .sticky-note[data-category="lessons-learned"] {
     background-color: var(--category-blue);
-    border-left: 4px solid var(--category-blue-border);
 }
 
 .sticky-note[data-category="ideas"],
 .sticky-note[data-category="lacked"],
-.sticky-note[data-category="future-considerations"] {
+.sticky-note[data-category="continue"],
+.sticky-note[data-category="keep"],
+.sticky-note[data-category="accomplishments"],
+.sticky-note[data-category="inclement-weather"] {
     background-color: var(--category-yellow);
-    border-left: 4px solid var(--category-yellow-border);
 }
 
-.sticky-note[data-category="stop"],
 .sticky-note[data-category="longed-for"],
-.sticky-note[data-category="drop"],
+.sticky-note[data-category="improve"],
 .sticky-note[data-category="problems"],
-.sticky-note[data-category="boulders"],
-.sticky-note[data-category="inclement-weather"] {
+.sticky-note[data-category="summit"] {
     background-color: var(--category-purple);
-    border-left: 4px solid var(--category-purple-border);
 }
 
 .sticky-content {
@@ -154,7 +156,6 @@
 } 
 
 [data-theme="dark"] .sticky-note {
-    border-left-width: 5px;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
 }
 
@@ -169,7 +170,6 @@
 [data-theme="dark"] .sticky-note:hover {
     transform: translateY(-5px) scale(1.02);
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6);
-    border-left-width: 6px;
 }
 
 [data-theme="dark"] .sticky-note .vote-btn {
@@ -187,4 +187,15 @@
 [data-theme="dark"] .sticky-container.drag-over {
     background-color: rgba(99, 102, 241, 0.1);
     box-shadow: inset 0 0 0 2px var(--primary-color);
+}
+
+/* Dark theme support for my-sticky highlighting */
+[data-theme="dark"] .sticky-note.my-sticky {
+    border-left: 6px solid white;
+    border-right: 6px solid white;
+}
+
+[data-theme="dark"] .sticky-note.my-sticky:hover {
+    border-left: 6px solid white;
+    border-right: 6px solid white;
 } 

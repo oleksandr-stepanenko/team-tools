@@ -1,0 +1,20 @@
+.separator-container {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 16px 0;
+  }
+  
+  .separator-container .line {
+    flex-grow: 1;
+    height: 1px;
+    background-color: #ccc;
+    border: none;
+  }
+  
+  .separator-container .text {
+    margin: 0 12px;
+    color: #666;
+    font-weight: bold;
+  }
+  
