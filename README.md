@@ -78,6 +78,11 @@ A modern, real-time retrospective board application designed for agile teams to 
 3. **Start the server**
 
    ```bash
+   npm start
+   ```
+   OR
+
+   ```bash
    npm run dev
    ```
 
