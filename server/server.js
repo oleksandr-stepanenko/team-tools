@@ -60,6 +60,9 @@ const rooms = {};
 // Store planning poker rooms
 const pokerRooms = {};
 
+// Store room timers
+const roomTimers = {};
+
 // Helper function to generate a room ID
 function generateRoomId() {
   return uuidv4().substring(0, 6);
@@ -216,6 +219,95 @@ io.on('connection', (socket) => {
   });
 
   // -------------------------- //
+  // Timer Functionality
+  // -------------------------- //
+
+  // Start a timer for the room
+  socket.on('start-timer', (roomId, durationMinutes) => {
+    if (!rooms[roomId]) {
+      socket.emit('error', 'Room does not exist');
+      return;
+    }
+
+    // Clear any existing timer for this room
+    if (roomTimers[roomId]) {
+      clearInterval(roomTimers[roomId].interval);
+    }
+
+    const durationSeconds = durationMinutes * 60;
+    const startTime = Date.now();
+    const endTime = startTime + (durationSeconds * 1000);
+
+    roomTimers[roomId] = {
+      startTime,
+      endTime,
+      durationSeconds,
+      remainingSeconds: durationSeconds,
+      isRunning: true,
+      interval: null
+    };
+
+    // Start the timer interval
+    roomTimers[roomId].interval = setInterval(() => {
+      const now = Date.now();
+      const remainingMs = endTime - now;
+      const remainingSeconds = Math.max(0, Math.ceil(remainingMs / 1000));
+
+      roomTimers[roomId].remainingSeconds = remainingSeconds;
+
+      if (remainingSeconds <= 0) {
+        // Timer finished
+        clearInterval(roomTimers[roomId].interval);
+        roomTimers[roomId].isRunning = false;
+        io.to(roomId).emit('timer-finished');
+        delete roomTimers[roomId];
+      } else {
+        // Send timer update to all clients in the room
+        io.to(roomId).emit('timer-tick', remainingSeconds);
+      }
+    }, 1000);
+
+    // Notify all clients that timer started
+    io.to(roomId).emit('timer-started', durationSeconds);
+  });
+
+  // Stop/pause a timer for the room
+  socket.on('stop-timer', (roomId) => {
+    if (!rooms[roomId]) {
+      socket.emit('error', 'Room does not exist');
+      return;
+    }
+
+    if (roomTimers[roomId]) {
+      clearInterval(roomTimers[roomId].interval);
+      roomTimers[roomId].isRunning = false;
+      
+      // Notify all clients that timer stopped
+      io.to(roomId).emit('timer-stopped', roomTimers[roomId].remainingSeconds);
+      
+      delete roomTimers[roomId];
+    }
+  });
+
+  // Get current timer status for a room
+  socket.on('get-timer-status', (roomId) => {
+    if (!rooms[roomId]) {
+      socket.emit('error', 'Room does not exist');
+      return;
+    }
+
+    if (roomTimers[roomId] && roomTimers[roomId].isRunning) {
+      socket.emit('timer-status', {
+        isRunning: true,
+        remainingSeconds: roomTimers[roomId].remainingSeconds,
+        totalSeconds: roomTimers[roomId].durationSeconds
+      });
+    } else {
+      socket.emit('timer-status', { isRunning: false });
+    }
+  });
+
+  // -------------------------- //
   // Planning Poker Functionality
   // -------------------------- //
 
@@ -329,6 +421,12 @@ io.on('connection', (socket) => {
         rooms[roomId].activeUsers.delete(socket.id);
         // Notify remaining users about the updated count
         io.to(roomId).emit('active-users-updated', rooms[roomId].activeUsers.size);
+        
+        // Clean up timer if room becomes empty
+        if (rooms[roomId].activeUsers.size === 0 && roomTimers[roomId]) {
+          clearInterval(roomTimers[roomId].interval);
+          delete roomTimers[roomId];
+        }
       }
     });
     

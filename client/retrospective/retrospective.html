@@ -40,6 +40,28 @@
                             <button id="share-room-btn" class="btn small"><i class="fas fa-share-alt"></i> Share</button>
                         </div>
                     </div>
+                    
+                    <!-- Timer Section -->
+                    <div id="timer-section" class="timer-section">
+                        <div class="timer-controls">
+                            <div class="timer-display">
+                                <div id="timer-time" class="timer-time">00:00</div>
+                                <div id="timer-status" class="timer-status">Timer Ready</div>
+                            </div>
+                            <div class="timer-actions">
+                                <div class="timer-input-group">
+                                    <input type="number" id="timer-duration" min="1" max="60" value="5" class="timer-input">
+                                    <label for="timer-duration">minutes</label>
+                                </div>
+                                <button id="start-timer-btn" class="btn success small">
+                                    <i class="fas fa-play"></i> Start
+                                </button>
+                                <button id="stop-timer-btn" class="btn success small hidden">
+                                    <i class="fas fa-stop"></i> Stop
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             

@@ -9,6 +9,9 @@ const RETROSPECTIVE_CONFIG = {
         VOTE_STICKY: 'vote-sticky',
         DELETE_STICKY: 'delete-sticky',
         MOVE_STICKY: 'move-sticky',
+        START_TIMER: 'start-timer',
+        STOP_TIMER: 'stop-timer',
+        GET_TIMER_STATUS: 'get-timer-status',
         
         // Server to Client
         AVAILABLE_TEMPLATES: 'available-templates',
@@ -19,6 +22,11 @@ const RETROSPECTIVE_CONFIG = {
         STICKY_VOTED: 'sticky-voted',
         STICKY_DELETED: 'sticky-deleted',
         STICKY_MOVED: 'sticky-moved',
+        TIMER_STARTED: 'timer-started',
+        TIMER_STOPPED: 'timer-stopped',
+        TIMER_TICK: 'timer-tick',
+        TIMER_FINISHED: 'timer-finished',
+        TIMER_STATUS: 'timer-status',
         CONNECT: 'connect',
         DISCONNECT: 'disconnect',
         ERROR: 'error'
@@ -629,6 +637,208 @@ class DragDropManager {
     }
 }
 
+// Timer Manager Class
+class TimerManager {
+    constructor(socket, appState) {
+        this.socket = socket;
+        this.state = appState;
+        this.isRunning = false;
+        this.remainingSeconds = 0;
+        this.totalSeconds = 0;
+        
+        // DOM elements
+        this.timerTime = document.getElementById('timer-time');
+        this.timerStatus = document.getElementById('timer-status');
+        this.timerDuration = document.getElementById('timer-duration');
+        this.startBtn = document.getElementById('start-timer-btn');
+        this.stopBtn = document.getElementById('stop-timer-btn');
+        
+        this.setupEventListeners();
+    }
+    
+    setupEventListeners() {
+        if (this.startBtn) {
+            this.startBtn.addEventListener('click', () => this.startTimer());
+        }
+        
+        if (this.stopBtn) {
+            this.stopBtn.addEventListener('click', () => this.stopTimer());
+        }
+    }
+    
+    startTimer() {
+        const duration = parseInt(this.timerDuration?.value) || 5;
+        
+        if (duration < 1 || duration > 60) {
+            showNotification('Timer duration must be between 1 and 60 minutes', true);
+            return;
+        }
+        
+        if (!this.state.currentRoomId) {
+            showNotification('You must be in a room to start the timer', true);
+            return;
+        }
+        
+        this.socket.emit(RETROSPECTIVE_CONFIG.SOCKET_EVENTS.START_TIMER, this.state.currentRoomId, duration);
+    }
+    
+    stopTimer() {
+        if (!this.state.currentRoomId) return;
+        
+        this.socket.emit(RETROSPECTIVE_CONFIG.SOCKET_EVENTS.STOP_TIMER, this.state.currentRoomId);
+    }
+    
+    onTimerStarted(durationSeconds) {
+        this.isRunning = true;
+        this.totalSeconds = durationSeconds;
+        this.remainingSeconds = durationSeconds;
+        
+        this.updateDisplay();
+        this.updateButtons();
+        this.updateStatus('Timer Running');
+        
+        showNotification(`Timer started for ${Math.floor(durationSeconds / 60)} minutes!`);
+    }
+    
+    onTimerStopped(remainingSeconds) {
+        this.isRunning = false;
+        this.remainingSeconds = remainingSeconds || 0;
+        
+        this.updateDisplay();
+        this.updateButtons();
+        this.updateStatus('Timer Stopped');
+        
+        showNotification('Timer has been stopped');
+    }
+    
+    onTimerTick(remainingSeconds) {
+        this.remainingSeconds = remainingSeconds;
+        this.updateDisplay();
+        
+        // Update visual state based on remaining time
+        if (remainingSeconds <= 10) {
+            this.timerTime?.classList.add('danger');
+            this.timerTime?.classList.remove('warning', 'running');
+        } else if (remainingSeconds <= 60) {
+            this.timerTime?.classList.add('warning');
+            this.timerTime?.classList.remove('danger', 'running');
+        } else {
+            this.timerTime?.classList.add('running');
+            this.timerTime?.classList.remove('danger', 'warning');
+        }
+    }
+    
+    onTimerFinished() {
+        this.isRunning = false;
+        this.remainingSeconds = 0;
+        
+        this.updateDisplay();
+        this.updateButtons();
+        this.updateStatus('Time\'s Up!');
+        
+        // Add finished animation
+        this.timerTime?.classList.add('timer-finished');
+        this.timerTime?.classList.remove('running', 'warning', 'danger');
+        
+        // Remove animation after it completes
+        setTimeout(() => {
+            this.timerTime?.classList.remove('timer-finished');
+        }, 2400); // 3 cycles * 0.8s = 2.4s
+        
+        // Show notification and play sound if possible
+        showNotification('⏰ Time\'s up! The timer has finished.', false);
+        this.playNotificationSound();
+        
+        // Reset status after a delay
+        setTimeout(() => {
+            this.updateStatus('Timer Ready');
+        }, 3000);
+    }
+    
+    onTimerStatus(status) {
+        if (status.isRunning) {
+            this.isRunning = true;
+            this.remainingSeconds = status.remainingSeconds;
+            this.totalSeconds = status.totalSeconds;
+            this.updateDisplay();
+            this.updateButtons();
+            this.updateStatus('Timer Running');
+            this.onTimerTick(status.remainingSeconds);
+        } else {
+            this.isRunning = false;
+            this.remainingSeconds = 0;
+            this.updateDisplay();
+            this.updateButtons();
+            this.updateStatus('Timer Ready');
+        }
+    }
+    
+    updateDisplay() {
+        if (!this.timerTime) return;
+        
+        const minutes = Math.floor(this.remainingSeconds / 60);
+        const seconds = this.remainingSeconds % 60;
+        
+        this.timerTime.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+    
+    updateButtons() {
+        if (this.isRunning) {
+            this.startBtn?.classList.add(RETROSPECTIVE_CONFIG.CSS_CLASSES.HIDDEN);
+            this.stopBtn?.classList.remove(RETROSPECTIVE_CONFIG.CSS_CLASSES.HIDDEN);
+            
+            if (this.timerDuration) {
+                this.timerDuration.disabled = true;
+            }
+        } else {
+            this.startBtn?.classList.remove(RETROSPECTIVE_CONFIG.CSS_CLASSES.HIDDEN);
+            this.stopBtn?.classList.add(RETROSPECTIVE_CONFIG.CSS_CLASSES.HIDDEN);
+            
+            if (this.timerDuration) {
+                this.timerDuration.disabled = false;
+            }
+        }
+    }
+    
+    updateStatus(status) {
+        if (this.timerStatus) {
+            this.timerStatus.textContent = status;
+        }
+    }
+    
+    playNotificationSound() {
+        try {
+            // Create audio context for notification sound
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            oscillator.frequency.setValueAtTime(600, audioContext.currentTime + 0.1);
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime + 0.2);
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+        } catch (error) {
+            // Fallback: no sound if audio context fails
+            console.log('Could not play notification sound:', error);
+        }
+    }
+    
+    // Request current timer status when joining a room
+    requestTimerStatus() {
+        if (this.state.currentRoomId) {
+            this.socket.emit(RETROSPECTIVE_CONFIG.SOCKET_EVENTS.GET_TIMER_STATUS, this.state.currentRoomId);
+        }
+    }
+}
+
 // Sticky Note Manager Class
 class StickyNoteManager {
     constructor(socket, state, hotTopicsManager) {
@@ -840,6 +1050,7 @@ const appState = {
 const hotTopicsManager = new HotTopicsManager(hotTopicsList, hotTopicsSection);
 const dragDropManager = new DragDropManager(socket, appState, hotTopicsManager);
 const stickyNoteManager = new StickyNoteManager(socket, appState, hotTopicsManager);
+const timerManager = new TimerManager(socket, appState);
 
 // ============================================================================
 // EVENT LISTENERS
@@ -1135,10 +1346,11 @@ function enterRoom(roomId, roomData) {
         });
     }
     
-    // Clean up localStorage after all stickies are loaded
+    // Clean up localStorage after all stickies are loaded and request timer status
     setTimeout(() => {
         stickyNoteManager.cleanupLocalStorage();
         hotTopicsManager.updateHotTopics();
+        timerManager.requestTimerStatus();
     }, RETROSPECTIVE_CONFIG.TIMEOUTS.HOT_TOPICS_UPDATE_DELAY);
     
     showNotification(`Joined room: ${roomId}`);
@@ -1258,4 +1470,28 @@ socket.on(RETROSPECTIVE_CONFIG.SOCKET_EVENTS.ERROR, (errorMessage) => {
 
 socket.on(RETROSPECTIVE_CONFIG.SOCKET_EVENTS.DISCONNECT, () => {
     showNotification('Connection lost. Please refresh the page.', true);
+});
+
+// ============================================================================
+// TIMER SOCKET EVENT HANDLERS
+// ============================================================================
+
+socket.on(RETROSPECTIVE_CONFIG.SOCKET_EVENTS.TIMER_STARTED, (durationSeconds) => {
+    timerManager.onTimerStarted(durationSeconds);
+});
+
+socket.on(RETROSPECTIVE_CONFIG.SOCKET_EVENTS.TIMER_STOPPED, (remainingSeconds) => {
+    timerManager.onTimerStopped(remainingSeconds);
+});
+
+socket.on(RETROSPECTIVE_CONFIG.SOCKET_EVENTS.TIMER_TICK, (remainingSeconds) => {
+    timerManager.onTimerTick(remainingSeconds);
+});
+
+socket.on(RETROSPECTIVE_CONFIG.SOCKET_EVENTS.TIMER_FINISHED, () => {
+    timerManager.onTimerFinished();
+});
+
+socket.on(RETROSPECTIVE_CONFIG.SOCKET_EVENTS.TIMER_STATUS, (status) => {
+    timerManager.onTimerStatus(status);
 });
