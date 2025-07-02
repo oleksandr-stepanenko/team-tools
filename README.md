@@ -1,179 +1,130 @@
-# Team Retrospective Application
+# 🚀 Collaborative Retro Board
 
-A real-time retrospective application built with Socket.IO that allows teams to conduct retrospective meetings remotely. This application enables creating and joining rooms, adding anonymous sticky notes, and voting on ideas.
+A modern, real-time retrospective board application designed for agile teams to conduct effective sprint retrospectives and planning poker sessions.
 
-## Features
+## ✨ Features
 
-- Create and join retrospective rooms with shareable room IDs
-- Choose from 6 different retrospective templates:
+### 🔄 Retrospective Board
+
+- **Multiple Templates**: Choose from 6 different retrospective formats
   - Start, Stop, Continue
   - What Went Well, What Could Be Improved, Ideas
-  - 4Ls: Liked, Learned, Lacked, Longed For
-  - DAKI: Drop, Add, Keep, Improve
-  - FLAP: Future considerations, Lessons learned, Accomplishments, Problems
-  - Mountain Climber: Boulders, Climbing equipment, Inclement weather, Summit
-- Add anonymous sticky notes in different categories based on the selected template
-- Vote on sticky notes
-- Real-time updates for all participants in the room
+  - 4L (Liked, Learned, Lacked, Longed For)
+  - DAKI (Drop, Add, Keep, Improve)
+  - FLAP (Future, Lessons, Accomplishments, Problems)
+  - Mountain Climber
+- **Real-time Collaboration**: Live updates across all participants
+- **Sticky Notes**: Create, edit, delete, and move notes between columns
+- **Voting System**: Vote on sticky notes to identify priorities
+- **Hot Topics**: Automatically highlights top-voted items
+- **Drag & Drop**: Intuitive column management
 
-## Technologies Used
+### 🎯 Personal Features
 
-- Node.js and Express for the server
-- Socket.IO for real-time communication
-- HTML, CSS, and JavaScript for the frontend
-- UUID for generating unique identifiers
+- **My Stickies Highlighting**: Your notes are highlighted with a special border (persists across sessions)
+- **Anonymous Participation**: Notes remain anonymous to others while being highlighted for you
+- **Local Storage**: Your sticky notes are remembered even after leaving and rejoining
 
-## Installation
+### ⏱️ Timer System
 
-1. Clone this repository
-2. Install dependencies:
+- **Collaborative Timer**: Start/stop timers visible to all participants
+- **Visual Feedback**: Color-coded countdown (green → yellow → red)
+- **Audio Notifications**: Pleasant chime sound when time expires
+- **Flexible Duration**: Set timers from 1-60 minutes
+- **Real-time Sync**: All participants see the same countdown
+
+### 🎨 User Experience
+
+- **Dark/Light Theme**: Toggle between themes
+- **Responsive Design**: Works on desktop, tablet, and mobile
+- **Modern UI**: Clean, intuitive interface with smooth animations
+
+### 🃏 Planning Poker
+
+- **Estimation Sessions**: Collaborative story point estimation
+- **Real-time Voting**: See when participants have voted
+- **Reveal System**: Simultaneous card reveal
+- **Consensus Detection**: Automatic detection of agreement
+
+## 🛠️ Tech Stack
+
+- **Backend**: Node.js, Express.js, Socket.IO
+- **Frontend**: Vanilla JavaScript, HTML5, CSS3
+- **Real-time**: WebSocket communication
+- **Storage**: In-memory (with localStorage for user preferences)
+- **Audio**: Web Audio API for notifications
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+
+### Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone <repository-url>
    ```
+
+2. **Install dependencies**
+
+   ```bash
    npm install
    ```
-3. Start the server:
-   ```
-   npm start
-   ```
-   Or for development with auto-restart:
-   ```
+
+3. **Start the server**
+
+   ```bash
    npm run dev
    ```
-4. Access the application at `http://localhost:3000`
 
-## How to Use
+4. **Open your browser**
+   Navigate to `http://localhost:3000`
 
-1. **Create a Room**:
+## 📁 Project Structure
 
-   - Click on the "Create Room" button on the home page
-   - Select a retrospective template:
-     - Start, Stop, Continue
-     - What Went Well, What Could Be Improved, Ideas
-     - 4Ls: Liked, Learned, Lacked, Longed For
-     - DAKI: Drop, Add, Keep, Improve
-     - FLAP: Future considerations, Lessons learned, Accomplishments, Problems
-     - Mountain Climber: Boulders, Climbing equipment, Inclement weather, Summit
-   - Click "Create Room with Template"
-   - A new room will be created with a unique ID using your selected template
-   - The app will automatically join the newly created room
+```
+├── client/                 # Frontend files
+│   ├── css/               # Stylesheets
+│   ├── retrospective/     # Retro board specific files
+│   ├── planning-poker/    # Planning poker files
+│   ├── shared/           # Shared components
+│   └── index.html        # Main landing page
+├── server/               # Backend files
+│   └── server.js        # Main server file
+├── package.json         # Dependencies and scripts
+└── README.md           # This file
+```
 
-2. **Join a Room**:
+## 🎮 How to Use
 
-   - Enter a valid room ID in the input field
-   - Click the "Join Room" button
-   - If the room exists, you'll join the retrospective board with the template that was selected when the room was created
+### Creating a Retrospective
 
-3. **Share Room ID**:
+1. **Start a Session**: Click "Create Room" on the homepage
+2. **Choose Template**: Select from 6 different retrospective formats
+3. **Share Room**: Share the room ID or link with your team
+4. **Add Notes**: Use the floating "Add Note" button to create sticky notes
+5. **Collaborate**: Vote, move, and discuss notes in real-time
+6. **Set Timer**: Use the built-in timer to manage discussion time
 
-   - Copy the room ID by clicking the "Copy ID" button
-   - Share this ID with your team members to join the same room
+### Joining a Session
 
-4. **Add Sticky Notes**:
+1. **Enter Room ID**: Input the room ID shared by your facilitator
+2. **Join Room**: Click "Join Room" to enter the session
+3. **Participate**: Add notes, vote, and collaborate with your team
 
-   - Click the "Add Note" button at the top of the board
-   - Select a category from the dropdown (based on the active template)
-   - Enter your note content
-   - Click "Add Note" to submit
+### Timer Usage
 
-5. **Vote on Sticky Notes**:
-   - Click the thumbs-up icon on any sticky note to vote
-   - Click again to remove your vote
-   - All votes are updated in real-time for all participants
+1. **Set Duration**: Choose 1-60 minutes
+2. **Start Timer**: Click the start button (visible to all participants)
+3. **Monitor Progress**: Watch the color-coded countdown
+4. **Get Notified**: Hear the pleasant chime when time is up
 
-## Available Templates
+## 🔧 Configuration
 
-### Start, Stop, Continue
+### Environment Variables
 
-A simple but effective format focusing on what the team should:
-
-- Start doing (new practices to adopt)
-- Stop doing (harmful or ineffective practices)
-- Continue doing (valuable practices to maintain)
-
-### What Went Well, What Could Be Improved, Ideas
-
-A classic retrospective format focusing on:
-
-- What Went Well (positive aspects)
-- What Could Be Improved (areas needing attention)
-- Ideas (suggestions for future improvements)
-
-### 4Ls: Liked, Learned, Lacked, Longed For
-
-A deeper reflective format examining what participants:
-
-- Liked (positive aspects)
-- Learned (new insights gained)
-- Lacked (missing elements)
-- Longed For (wishes and desires)
-
-### DAKI: Drop, Add, Keep, Improve
-
-A two-by-two grid format focusing on process improvements:
-
-- Drop (what should we remove from our process?)
-- Add (what should we add to our process?)
-- Keep (what should we continue doing?)
-- Improve (which areas need improvement?)
-
-### FLAP: Future, Lessons, Accomplishments, Problems
-
-An acronym-based approach examining sprint outcomes:
-
-- Future considerations (what should we consider for the next sprint?)
-- Lessons learned (top takeaways from the last sprint)
-- Accomplishments (high points of the last sprint)
-- Problems (low points of the last sprint)
-
-### Mountain Climber
-
-A visually engaging template using mountain climbing metaphors:
-
-- Boulders (obstacles faced during the sprint)
-- Climbing equipment (tools that helped reach goals)
-- Inclement weather (delays, setbacks, or disruptions)
-- The summit (did we reach our sprint goal?)
-
-## License
-
-MIT
-
-# Team Collaboration Tools CSS Organization
-
-This project uses a component-based CSS organization to improve maintainability and reuse across the application.
-
-## CSS Structure
-
-The CSS is organized as follows:
-
-- `public/css/styles.css` - Main CSS file that imports all component styles
-- `public/css/components/` - Directory containing all component CSS files
-
-### Component Files
-
-The styles are split into logical components:
-
-- `variables.css` - Global CSS variables for colors, spacing, shadows, etc.
-- `base.css` - Base styles, container, utility classes, header and footer
-- `buttons.css` - Button styles and button-specific components
-- `forms.css` - Form elements, inputs, and form-related components
-- `modals.css` - Modal and dialog styles
-- `notifications.css` - Notification and alert styles
-- `app-selection.css` - App selection/landing page styles
-- `planning-poker.css` - Planning poker specific styles
-- `retrospective.css` - Retrospective board specific styles
-
-## Benefits of This Approach
-
-1. **Improved Readability**: Smaller, focused files are easier to navigate and understand
-2. **Better Maintainability**: Changes to one component don't impact others
-3. **Easier Collaboration**: Team members can work on different components simultaneously
-4. **Reusability**: Component styles can be reused across the application
-5. **Performance**: Potentially better caching and load times for component-based files
-
-## How to Use
-
-When adding new styles:
-
-1. Identify which component the style belongs to
-2. Add the style to the appropriate component file
-3. If creating a new component, add an import to `styles.css`
+- `PORT`: Server port (default: 3000)

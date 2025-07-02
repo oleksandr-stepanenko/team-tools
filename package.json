@@ -1,7 +1,7 @@
 {
-  "name": "compass-collaboration-tools",
-  "version": "2.0.0",
-  "description": "A refactored real-time retrospective and planning poker application with modular architecture",
+  "name": "compass",
+  "version": "1.0.3",
+  "description": "A real-time retrospective and planning poker application",
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
