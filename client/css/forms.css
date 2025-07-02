@@ -55,7 +55,6 @@
     border-radius: 12px;
     font-size: 1rem;
     transition: var(--transition);
-    margin-bottom: 24px;
     background-color: var(--bg-color);
     color: var(--text-color);
 }
@@ -88,48 +87,6 @@
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-}
-
-/* Share link input styles */
-.share-link-container {
-    display: flex;
-    background-color: var(--bg-color);
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 16px;
-    border: 1px solid var(--border-color);
-}
-
-.share-link {
-    flex: 1;
-    padding: 14px 16px;
-    border: none;
-    background-color: var(--bg-color);
-    font-size: 0.95rem;
-    color: var(--text-color);
-}
-
-.share-link:focus {
-    outline: none;
-}
-
-.copy-share-link-btn {
-    padding: 0 20px;
-    background-color: var(--bg-color);
-    border: none;
-    border-left: 1px solid var(--border-color);
-    color: var(--primary-color);
-    cursor: pointer;
-    transition: var(--transition);
-    font-size: 1rem;
-}
-
-.copy-share-link-btn:hover {
-    background-color: var(--border-color);
-}
-
-.copy-share-link-btn.copied {
-    color: var(--success-color);
 }
 
 /* Responsive form styles */

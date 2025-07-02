@@ -9,21 +9,21 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 // Serve static files
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../client')));
 
 // Route for the retrospective page
 app.get('/retrospective', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'retrospective.html'));
+  res.sendFile(path.join(__dirname, '../client/retrospective/retrospective.html'));
 });
 
 // Route for the planning poker page
 app.get('/planning-poker', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'planning-poker.html'));
+  res.sendFile(path.join(__dirname, '../client/planning-poker/planning-poker.html'));
 });
 
 // Route for the main page
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, '../client', 'index.html'));
 });
 
 // Define retrospective templates
@@ -37,8 +37,20 @@ const TEMPLATES = {
     columns: ['went-well', 'to-improve', 'ideas']
   },
   '4l': {
-    name: 'Liked, Learned, Lacked, Longed For',
+    name: 'Liked, Learned, Lacked, Longed For (4L)',
     columns: ['liked', 'learned', 'lacked', 'longed-for']
+  },
+  'daki': {
+    name: 'Drop, Add, Keep, Improve (DAKI)',
+    columns: ['drop', 'add', 'keep', 'improve']
+  },
+  'flap': {
+    name: 'Future, Lessons, Accomplishments, Problems (FLAP)',
+    columns: ['future-considerations', 'lessons-learned', 'accomplishments', 'problems']
+  },
+  'mountain-climber': {
+    name: 'Mountain Climber',
+    columns: ['boulders', 'climbing-equipment', 'inclement-weather', 'summit']
   }
 };
 
@@ -101,7 +113,7 @@ io.on('connection', (socket) => {
 
   // Leave a room (called when user navigates away or explicitly leaves)
   socket.on('leave-room', (roomId) => {
-    if (rooms[roomId] && rooms[roomId].activeUsers) {
+    if (rooms[roomId]?.activeUsers) {
       socket.leave(roomId);
       rooms[roomId].activeUsers.delete(socket.id);
       
@@ -136,7 +148,7 @@ io.on('connection', (socket) => {
 
   // Vote for a sticky note
   socket.on('vote-sticky', (roomId, stickyId) => {
-    if (!rooms[roomId] || !rooms[roomId].stickies || !rooms[roomId].stickies[stickyId]) {
+    if (!rooms[roomId]?.stickies[stickyId]) {
       socket.emit('error', 'Invalid room or sticky note');
       return;
     }
@@ -166,7 +178,7 @@ io.on('connection', (socket) => {
 
   // Delete a sticky note
   socket.on('delete-sticky', (roomId, stickyId) => {
-    if (!rooms[roomId] || !rooms[roomId].stickies || !rooms[roomId].stickies[stickyId]) {
+    if (!rooms[roomId]?.stickies[stickyId]) {
       socket.emit('error', 'Invalid room or sticky note');
       return;
     }
@@ -189,7 +201,7 @@ io.on('connection', (socket) => {
 
   // Move a sticky note to a different column
   socket.on('move-sticky', (roomId, stickyId, newCategory) => {
-    if (!rooms[roomId] || !rooms[roomId].stickies || !rooms[roomId].stickies[stickyId]) {
+    if (!rooms[roomId]?.stickies[stickyId]) {
       socket.emit('error', 'Invalid room or sticky note');
       return;
     }
@@ -307,12 +319,12 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     // Clean up retrospective room votes
     Object.keys(rooms).forEach(roomId => {
-      if (rooms[roomId].votes && rooms[roomId].votes[socket.id]) {
+      if (rooms[roomId]?.votes[socket.id]) {
         delete rooms[roomId].votes[socket.id];
       }
       
       // Update active users count when a user disconnects
-      if (rooms[roomId].activeUsers && rooms[roomId].activeUsers.has(socket.id)) {
+      if (rooms[roomId]?.activeUsers.has(socket.id)) {
         rooms[roomId].activeUsers.delete(socket.id);
         // Notify remaining users about the updated count
         io.to(roomId).emit('active-users-updated', rooms[roomId].activeUsers.size);
@@ -321,13 +333,13 @@ io.on('connection', (socket) => {
     
     // Clean up poker rooms
     Object.keys(pokerRooms).forEach(roomId => {
+
       // Remove participant
-      if (pokerRooms[roomId].participants && pokerRooms[roomId].participants[socket.id]) {
-        const leavingParticipant = pokerRooms[roomId].participants[socket.id];
+      if (pokerRooms[roomId]?.participants[socket.id]) {
         delete pokerRooms[roomId].participants[socket.id];
         
         // Remove vote
-        if (pokerRooms[roomId].votes && pokerRooms[roomId].votes[socket.id]) {
+        if (pokerRooms[roomId]?.votes[socket.id]) {
           delete pokerRooms[roomId].votes[socket.id];
         }
         

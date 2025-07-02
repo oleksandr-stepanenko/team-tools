@@ -1,0 +1,190 @@
+/* ===========================
+   STICKY NOTES
+   =========================== */
+
+.sticky-note {
+    background-color: var(--category-yellow);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    border-left: 4px solid rgba(0, 0, 0, 0.1);
+    cursor: grab;
+    user-select: none;
+}
+
+.sticky-note:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: var(--shadow);
+}
+
+/* Category-specific sticky note colors */
+.sticky-note[data-category="went-well"],
+.sticky-note[data-category="continue"],
+.sticky-note[data-category="liked"],
+.sticky-note[data-category="keep"],
+.sticky-note[data-category="accomplishments"],
+.sticky-note[data-category="climbing-equipment"],
+.sticky-note[data-category="summit"] {
+    background-color: var(--category-green);
+    border-left: 4px solid var(--category-green-border);
+}
+
+.sticky-note[data-category="to-improve"],
+.sticky-note[data-category="start"],
+.sticky-note[data-category="learned"],
+.sticky-note[data-category="add"],
+.sticky-note[data-category="improve"],
+.sticky-note[data-category="lessons-learned"] {
+    background-color: var(--category-blue);
+    border-left: 4px solid var(--category-blue-border);
+}
+
+.sticky-note[data-category="ideas"],
+.sticky-note[data-category="lacked"],
+.sticky-note[data-category="future-considerations"] {
+    background-color: var(--category-yellow);
+    border-left: 4px solid var(--category-yellow-border);
+}
+
+.sticky-note[data-category="stop"],
+.sticky-note[data-category="longed-for"],
+.sticky-note[data-category="drop"],
+.sticky-note[data-category="problems"],
+.sticky-note[data-category="boulders"],
+.sticky-note[data-category="inclement-weather"] {
+    background-color: var(--category-purple);
+    border-left: 4px solid var(--category-purple-border);
+}
+
+.sticky-content {
+    margin-bottom: 16px;
+    word-break: break-word;
+    line-height: 1.5;
+    flex-grow: 1;
+}
+
+/* Sticky Footer actions */
+.sticky-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    opacity: 0.6;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-btn:hover {
+    color: var(--danger-color);
+    opacity: 1;
+    background-color: rgba(207, 34, 46, 0.1);
+}
+
+.sticky-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+}
+
+/* Drag and Drop styles */
+.drag-handle {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: var(--text-muted);
+    opacity: 0.5;
+    font-size: 0.8rem;
+    cursor: grab;
+    transition: opacity 0.2s ease;
+}
+
+.sticky-note:hover .drag-handle {
+    opacity: 0.8;
+}
+
+.sticky-note.dragging {
+    cursor: grabbing;
+    z-index: 1000;
+    opacity: 0.6;
+    transform: scale(1.05);
+    box-shadow: var(--shadow-lg);
+}
+
+.sticky-container.drag-over {
+    background-color: var(--bg-hover);
+    box-shadow: inset 0 0 0 2px var(--primary-light);
+    border-radius: 8px;
+}
+
+.drag-ghost {
+    font-size: 24px;
+    background-color: transparent;
+}
+
+/* Animation for sticky note when moved to a new column */
+@keyframes highlight-sticky {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.sticky-note.moved {
+    animation: highlight-sticky 0.5s ease;
+}
+
+.sticky-time {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+} 
+
+[data-theme="dark"] .sticky-note {
+    border-left-width: 5px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .sticky-note .sticky-content {
+    color: #e6edf3;
+}
+
+[data-theme="dark"] .sticky-note .sticky-time {
+    color: #8b949e;
+}
+
+[data-theme="dark"] .sticky-note:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6);
+    border-left-width: 6px;
+}
+
+[data-theme="dark"] .sticky-note .vote-btn {
+    background-color: rgba(56, 139, 253, 0.1);
+    color: var(--text-color);
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+[data-theme="dark"] .sticky-note .vote-btn:hover {
+    background-color: rgba(56, 139, 253, 0.2);
+    border-color: rgba(56, 139, 253, 0.5);
+}
+
+[data-theme="dark"] .sticky-container.drag-over {
+    background-color: rgba(99, 102, 241, 0.1);
+    box-shadow: inset 0 0 0 2px var(--primary-color);
+} 

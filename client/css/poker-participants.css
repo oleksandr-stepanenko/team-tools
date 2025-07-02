@@ -1,0 +1,89 @@
+/* ===========================
+   POKER PARTICIPANTS
+   =========================== */
+
+/* Participants List */
+.participants-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.participant-item {
+    background-color: var(--bg-color);
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: var(--transition);
+}
+
+.participant-item:hover {
+    transform: translateX(2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.participant-name {
+    font-weight: 500;
+}
+
+/* Participant Status Indicators */
+.participant-status {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--border-color);
+}
+
+.participant-status.voted {
+    background-color: var(--success-color);
+    box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
+}
+
+.participant-status.not-voted {
+    background-color: var(--danger-color);
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+/* Participant Cards */
+.participant-card {
+    width: 32px;
+    height: 48px;
+    background-color: var(--poker-card-back);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin-left: auto;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+}
+
+.participant-card.face-down {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    color: transparent;
+}
+
+.participant-card.face-up {
+    background-color: var(--poker-card-revealed);
+    color: var(--text-color);
+}
+
+/* Compact Participants */
+.poker-controls.compact .participants-list {
+    gap: 8px;
+}
+
+.poker-controls.compact .participant-card {
+    width: 24px;
+    height: 36px;
+    font-size: 0.9rem;
+}
+
+.poker-controls.compact .participant-item {
+    padding: 10px 12px;
+    gap: 8px;
+} 

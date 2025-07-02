@@ -1,0 +1,96 @@
+/* ===========================
+   RETROSPECTIVE BOARD
+   =========================== */
+
+#retrospective-board {
+    margin-top: 40px;
+    flex: 1;
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    position: relative;
+    padding-bottom: 80px;
+}
+
+#retrospective-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 24px;
+    margin-bottom: 20px;
+}
+
+.columns-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    margin-top: 20px;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    min-height: 100px;
+}
+
+.column {
+    background-color: var(--bg-light);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 24px;
+    min-height: 450px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.column h3 {
+    text-align: center;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 1.1rem;
+}
+
+.column h3 i {
+    font-size: 0.875em;
+}
+
+.column-description {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    margin-bottom: 24px;
+    padding: 0 10px;
+    line-height: 1.5;
+}
+
+.sticky-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 300px;
+    flex-grow: 1;
+}
+
+/* Add placeholder for empty containers */
+.sticky-container:empty::after {
+    content: "Drag items here";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 100px;
+    color: var(--text-muted);
+    font-style: italic;
+    opacity: 0.6;
+    pointer-events: none;
+} 

@@ -1,0 +1,39 @@
+:root {
+    /* Spacing System */
+    --space-xs: 8px;
+    --space-sm: 12px;
+    --space-md: 24px;
+    --space-lg: 40px;
+    
+    /* Typography Scale */
+    --font-sm: 0.875rem;
+    --font-base: 1rem;
+    --font-md: 1.25rem;
+    --font-lg: 1.5rem;
+    --font-xl: 1.75rem;
+    --font-2xl: 2.25rem;
+    
+    /* Poker Card Colors */
+    --poker-card-bg: var(--bg-light);
+    --poker-card-selected: rgba(22, 163, 74, 0.1);
+    --poker-card-coffee: #f3e8ff;
+    --poker-card-back: var(--primary-color);
+    --poker-card-revealed: var(--bg-color);
+
+    --category-green: var(--green-sticky);
+    --category-green-border: #86efac;
+    --category-blue: var(--blue-sticky);
+    --category-blue-border: #93c5fd;
+    --category-yellow: var(--yellow-sticky);
+    --category-yellow-border: #fde68a;
+    --category-purple: var(--purple-sticky);
+    --category-purple-border: #c4b5fd;
+}
+
+/* Dark mode category colors */
+[data-theme="dark"] {
+    --category-green-border: #56d364;
+    --category-blue-border: #58a6ff;
+    --category-yellow-border: #f0db4f;
+    --category-purple-border: #bf8af9;
+} 

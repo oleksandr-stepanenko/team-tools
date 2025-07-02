@@ -1,6 +1,6 @@
 /* Modal and Dialog Styles */
 
-/* Generic Modal Styles */
+/* Base Modal Class - This was missing! */
 .modal {
     position: fixed;
     top: 0;
@@ -18,16 +18,12 @@
     transition: var(--transition);
 }
 
-.modal.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
 .modal:not(.hidden) {
     opacity: 1;
     pointer-events: auto;
 }
 
+/* Generic Modal Styles */
 .modal-content {
     background-color: var(--bg-light);
     width: 90%;

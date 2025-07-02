@@ -1,0 +1,116 @@
+/* ===========================
+   POKER CARDS
+   =========================== */
+
+/* Cards Container */
+.poker-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+/* Individual Card Styling */
+.poker-card {
+    background-color: var(--poker-card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-2xl);
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+    user-select: none;
+    position: relative;
+    color: var(--text-color);
+}
+
+.poker-card:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: var(--shadow);
+    border-color: var(--primary-light);
+}
+
+.poker-card.selected {
+    background-color: var(--poker-card-selected);
+    border-color: var(--success-color);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: var(--shadow);
+}
+
+.poker-card.selected::after {
+    content: "✓";
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 0.7em;
+    color: var(--success-color);
+    background: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-sm);
+    animation: pop-in 0.3s ease-out;
+}
+
+/* Coffee Card Variant */
+.poker-card[data-value="coffee"] {
+    background-color: var(--poker-card-coffee);
+    font-size: var(--font-xl);
+}
+
+.poker-card[data-value="coffee"]:hover {
+    background-color: #e9d5ff;
+}
+
+/* Compact Card Styles */
+.poker-controls.compact .poker-cards-container {
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+    gap: var(--space-sm);
+    margin-bottom: 20px;
+}
+
+.poker-controls.compact .poker-card {
+    height: 90px;
+    font-size: var(--font-xl);
+}
+
+/* Consensus Highlighting */
+.consensus-match {
+    animation: consensus-highlight 1.5s ease-in-out;
+    border-color: var(--success-color) !important;
+}
+
+@keyframes pop-in {
+    0% { 
+        transform: scale(0); 
+        opacity: 0; 
+    }
+    70% { 
+        transform: scale(1.2); 
+        opacity: 1; 
+    }
+    100% { 
+        transform: scale(1); 
+        opacity: 1; 
+    }
+}
+
+@keyframes consensus-highlight {
+    0% { 
+        box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7); 
+    }
+    70% { 
+        box-shadow: 0 0 0 10px rgba(22, 163, 74, 0); 
+    }
+    100% { 
+        box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); 
+    }
+} 

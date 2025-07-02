@@ -1,0 +1,77 @@
+/* ===========================
+   POKER LAYOUT & PANELS
+   =========================== */
+
+/* Panels and Sections */
+.poker-panel,
+.poker-results,
+.poker-participants {
+    background-color: var(--bg-light);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    padding: var(--space-lg);
+}
+
+#poker-welcome-section {
+    background-color: var(--bg-light);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    padding: var(--space-lg);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#poker-welcome-section h2,
+.poker-participants h3,
+.poker-results h3 {
+    font-size: var(--font-lg);
+    font-weight: 600;
+    margin-bottom: var(--space-md);
+    color: var(--text-color);
+}
+
+#poker-name-input-section {
+    margin-bottom: var(--space-xs);
+}
+
+/* Board Layout */
+#planning-poker-board {
+    width: 100%;
+    margin: 0;
+}
+
+.poker-controls {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+}
+
+.poker-controls.compact {
+    grid-template-columns: 3fr 1fr;
+    gap: 30px;
+    align-items: start;
+}
+
+.poker-controls-left,
+.poker-controls-right,
+.poker-controls-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.poker-controls-buttons {
+    margin-bottom: 20px;
+}
+
+/* Compact Layout Adjustments */
+.poker-controls.compact .poker-participants {
+    padding: 20px;
+}
+
+.poker-controls.compact .poker-results {
+    margin-top: 0;
+    padding: 20px;
+} 

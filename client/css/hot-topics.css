@@ -1,0 +1,122 @@
+/* ===========================
+   HOT TOPICS SECTION
+   =========================== */
+
+#hot-topics-section {
+    flex: 0 0 60%;
+    background-color: var(--bg-light);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: var(--shadow);
+    height: fit-content;
+}
+
+#hot-topics-section h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary-color);
+}
+
+#hot-topics-section h3 i {
+    color: #e25822;
+}
+
+#hot-topics-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.hot-topics-empty {
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 12px 0;
+}
+
+.hot-topic-item {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: var(--bg-hover);
+    transition: var(--transition);
+}
+
+.hot-topic-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.hot-topic-votes {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 16px;
+    min-width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.hot-topic-content {
+    flex: 1;
+    font-size: 0.9rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+}
+
+.hot-topic-category {
+    font-size: 0.75rem;
+    border-radius: 12px;
+    padding: 2px 8px;
+    align-self: center;
+}
+
+/* Hot topic category colors using shared variables */
+.hot-topic-category[data-category="went-well"],
+.hot-topic-category[data-category="continue"],
+.hot-topic-category[data-category="liked"],
+.hot-topic-category[data-category="keep"],
+.hot-topic-category[data-category="accomplishments"],
+.hot-topic-category[data-category="climbing-equipment"],
+.hot-topic-category[data-category="summit"] {
+    background-color: var(--category-green);
+}
+
+.hot-topic-category[data-category="to-improve"],
+.hot-topic-category[data-category="start"],
+.hot-topic-category[data-category="learned"],
+.hot-topic-category[data-category="add"],
+.hot-topic-category[data-category="improve"],
+.hot-topic-category[data-category="lessons-learned"] {
+    background-color: var(--category-blue);
+}
+
+.hot-topic-category[data-category="ideas"],
+.hot-topic-category[data-category="lacked"],
+.hot-topic-category[data-category="future-considerations"] {
+    background-color: var(--category-yellow);
+}
+
+.hot-topic-category[data-category="stop"],
+.hot-topic-category[data-category="longed-for"],
+.hot-topic-category[data-category="drop"],
+.hot-topic-category[data-category="problems"],
+.hot-topic-category[data-category="boulders"],
+.hot-topic-category[data-category="inclement-weather"] {
+    background-color: var(--category-purple);
+} 

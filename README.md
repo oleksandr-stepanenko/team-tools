@@ -5,10 +5,13 @@ A real-time retrospective application built with Socket.IO that allows teams to 
 ## Features
 
 - Create and join retrospective rooms with shareable room IDs
-- Choose from 3 different retrospective templates:
+- Choose from 6 different retrospective templates:
   - Start, Stop, Continue
   - What Went Well, What Could Be Improved, Ideas
   - 4Ls: Liked, Learned, Lacked, Longed For
+  - DAKI: Drop, Add, Keep, Improve
+  - FLAP: Future considerations, Lessons learned, Accomplishments, Problems
+  - Mountain Climber: Boulders, Climbing equipment, Inclement weather, Summit
 - Add anonymous sticky notes in different categories based on the selected template
 - Vote on sticky notes
 - Real-time updates for all participants in the room
@@ -40,25 +43,32 @@ A real-time retrospective application built with Socket.IO that allows teams to 
 ## How to Use
 
 1. **Create a Room**:
+
    - Click on the "Create Room" button on the home page
    - Select a retrospective template:
      - Start, Stop, Continue
      - What Went Well, What Could Be Improved, Ideas
      - 4Ls: Liked, Learned, Lacked, Longed For
+     - DAKI: Drop, Add, Keep, Improve
+     - FLAP: Future considerations, Lessons learned, Accomplishments, Problems
+     - Mountain Climber: Boulders, Climbing equipment, Inclement weather, Summit
    - Click "Create Room with Template"
    - A new room will be created with a unique ID using your selected template
    - The app will automatically join the newly created room
 
 2. **Join a Room**:
+
    - Enter a valid room ID in the input field
    - Click the "Join Room" button
    - If the room exists, you'll join the retrospective board with the template that was selected when the room was created
 
 3. **Share Room ID**:
+
    - Copy the room ID by clicking the "Copy ID" button
    - Share this ID with your team members to join the same room
 
 4. **Add Sticky Notes**:
+
    - Click the "Add Note" button at the top of the board
    - Select a category from the dropdown (based on the active template)
    - Enter your note content
@@ -72,27 +82,60 @@ A real-time retrospective application built with Socket.IO that allows teams to 
 ## Available Templates
 
 ### Start, Stop, Continue
+
 A simple but effective format focusing on what the team should:
+
 - Start doing (new practices to adopt)
 - Stop doing (harmful or ineffective practices)
 - Continue doing (valuable practices to maintain)
 
 ### What Went Well, What Could Be Improved, Ideas
+
 A classic retrospective format focusing on:
+
 - What Went Well (positive aspects)
 - What Could Be Improved (areas needing attention)
 - Ideas (suggestions for future improvements)
 
 ### 4Ls: Liked, Learned, Lacked, Longed For
+
 A deeper reflective format examining what participants:
+
 - Liked (positive aspects)
 - Learned (new insights gained)
 - Lacked (missing elements)
 - Longed For (wishes and desires)
 
+### DAKI: Drop, Add, Keep, Improve
+
+A two-by-two grid format focusing on process improvements:
+
+- Drop (what should we remove from our process?)
+- Add (what should we add to our process?)
+- Keep (what should we continue doing?)
+- Improve (which areas need improvement?)
+
+### FLAP: Future, Lessons, Accomplishments, Problems
+
+An acronym-based approach examining sprint outcomes:
+
+- Future considerations (what should we consider for the next sprint?)
+- Lessons learned (top takeaways from the last sprint)
+- Accomplishments (high points of the last sprint)
+- Problems (low points of the last sprint)
+
+### Mountain Climber
+
+A visually engaging template using mountain climbing metaphors:
+
+- Boulders (obstacles faced during the sprint)
+- Climbing equipment (tools that helped reach goals)
+- Inclement weather (delays, setbacks, or disruptions)
+- The summit (did we reach our sprint goal?)
+
 ## License
 
-MIT 
+MIT
 
 # Team Collaboration Tools CSS Organization
 
@@ -102,7 +145,7 @@ This project uses a component-based CSS organization to improve maintainability 
 
 The CSS is organized as follows:
 
-- `public/css/main.css` - Main CSS file that imports all component styles
+- `public/css/styles.css` - Main CSS file that imports all component styles
 - `public/css/components/` - Directory containing all component CSS files
 
 ### Component Files
@@ -116,7 +159,7 @@ The styles are split into logical components:
 - `modals.css` - Modal and dialog styles
 - `notifications.css` - Notification and alert styles
 - `app-selection.css` - App selection/landing page styles
-- `poker-game.css` - Planning poker specific styles
+- `planning-poker.css` - Planning poker specific styles
 - `retrospective.css` - Retrospective board specific styles
 
 ## Benefits of This Approach
@@ -133,4 +176,4 @@ When adding new styles:
 
 1. Identify which component the style belongs to
 2. Add the style to the appropriate component file
-3. If creating a new component, add an import to `main.css` 
+3. If creating a new component, add an import to `styles.css`

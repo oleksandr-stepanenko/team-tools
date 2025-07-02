@@ -1,0 +1,148 @@
+/* ===========================
+   BASE COMPONENTS
+   =========================== */
+
+/* Active users counter */
+.active-users-counter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 16px;
+    background-color: var(--bg-hover);
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.active-users-counter i {
+    color: var(--primary-color);
+}
+
+#active-users-count {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.room-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#welcome-section {
+    text-align: center;
+}
+
+/* ===========================
+   TEMPLATE SELECTION
+   =========================== */
+
+#template-selection-section h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.template-intro {
+    color: var(--text-color);
+    opacity: 0.8;
+    margin-bottom: 28px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.templates-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 24px;
+    max-width: 1140px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.template-card {
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    padding: 28px;
+    cursor: pointer;
+    transition: var(--transition);
+    background-color: var(--bg-light);
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    max-width: 360px;
+    margin-bottom: 24px;
+}
+
+.template-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow);
+    border-color: var(--primary-light);
+}
+
+.template-card.selected {
+    border-color: var(--primary-color);
+    background-color: rgba(99, 102, 241, 0.05);
+    transform: translateY(-5px);
+}
+
+.template-card h4 {
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.template-card p {
+    color: var(--text-color);
+    opacity: 0.8;
+    margin-bottom: 24px;
+    line-height: 1.6;
+    font-size: 1.05rem;
+}
+
+.template-preview {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.template-preview .preview-column {
+    flex: 1;
+    height: 40px;
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.template-preview .preview-column:nth-child(1) {
+    background-color: var(--category-green);
+}
+
+.template-preview .preview-column:nth-child(2) {
+    background-color: var(--category-blue);
+}
+
+.template-preview .preview-column:nth-child(3) {
+    background-color: var(--category-yellow);
+}
+
+.template-preview .preview-column:nth-child(4) {
+    background-color: var(--category-purple);
+}
+
+.template-actions {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.template-actions .btn {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+}

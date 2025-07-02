@@ -1,0 +1,26 @@
+/* Notification Styles */
+.notification {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    padding: 4px 8px;
+    background-color: var(--success-color);
+    color: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    transition: var(--transition);
+    z-index: 900;
+    opacity: 0;
+    transform: translateY(20px);
+    max-width: 350px;
+    font-weight: 500;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notification.error {
+    background-color: var(--danger-color);
+}

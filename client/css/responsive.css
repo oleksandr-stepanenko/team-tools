@@ -1,0 +1,172 @@
+/* ===========================
+   RESPONSIVE DESIGN
+   =========================== */
+
+/* Mobile Styles - 768px and below */
+@media (max-width: 768px) {
+    .floating-btn {
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+
+    .app-cards {
+        flex-direction: column;
+    }
+
+    #hot-topics-section {
+        flex: 0 0 100%;
+    }
+
+    #retrospective-container {
+        flex-direction: column-reverse;
+    }
+
+    .columns-container {
+        grid-template-columns: minmax(280px, 500px);
+        max-width: 500px;
+    }
+    
+    #room-info {
+        padding: 28px 20px;
+    }
+    
+    .column {
+        padding: 20px;
+    }
+    
+    .templates-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+    }
+    
+    .template-card {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+        margin-bottom: 24px;
+    }
+}
+
+/* Tablet Styles - 768px to 991px */
+@media (max-width: 991px) and (min-width: 768px) {
+    .columns-container {
+        grid-template-columns: repeat(2, minmax(280px, 1fr));
+        max-width: 800px;
+    }
+    
+    .templates-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 24px;
+    }
+    
+    .template-card {
+        flex: 0 1 calc(50% - 24px);
+        max-width: 360px;
+        height: auto;
+        margin-bottom: 24px;
+    }
+
+    #retrospective-container {
+        flex-direction: column-reverse;
+    }
+}
+
+/* Desktop Styles - 992px and above */
+@media (min-width: 992px) {
+    .templates-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 24px;
+        margin-top: 24px;
+    }
+    
+    .template-card {
+        flex: 0 1 calc(33.33% - 24px);
+        max-width: 360px;
+        height: auto;
+        margin-bottom: 24px;
+    }
+}
+
+/* Large Desktop Styles - 992px to 1439px */
+@media (max-width: 1439px) and (min-width: 992px) {
+    .columns-container {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 100%;
+    }
+    
+    .columns-container.four-columns {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .columns-container.three-columns {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .columns-container.two-columns {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Extra Large Desktop Styles - 1440px and above */
+@media (min-width: 1440px) {
+    .columns-container {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 100%;
+    }
+    
+    .columns-container.four-columns {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .columns-container.three-columns {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .columns-container.two-columns {
+        grid-template-columns: repeat(2, 1fr);
+    }
+} 
+
+/* ===========================
+   PLANNING POKER RESPONSIVE DESIGN
+   =========================== */
+
+/* Mobile Styles - 768px and below */
+@media (max-width: 768px) {
+    .poker-card[data-value="coffee"] {
+        font-size: var(--font-lg);
+    }
+    
+    .poker-controls.compact .poker-card[data-value="coffee"] {
+        font-size: var(--font-base);
+    }
+
+    .poker-controls.compact .poker-cards-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .poker-controls.compact .poker-card {
+        height: 70px;
+    }
+    
+    .poker-controls-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .poker-controls.compact .results-list {
+        grid-template-columns: 1fr;
+    }
+
+    .poker-controls {
+        grid-template-columns: revert-layer !important;
+    }
+}

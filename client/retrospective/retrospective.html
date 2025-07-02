@@ -5,39 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Retrospective</title>
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="js/theme-toggle.js"></script>
+    <script src="/shared/theme-toggle.js"></script>
+    <script src="/shared/header.js" type="text/javascript" defer></script>
+    <script src="/shared/footer.js" type="text/javascript" defer></script>
 </head>
 
 <body>
-    <!-- Site Header with Navigation -->
-    <header class="site-header">
-        <div class="header-container">
-            <a href="/" class="site-logo">
-                <i class="fas fa-compass"></i>
-                <span>Compass</span>
-            </a>
-            <nav class="site-nav">
-                <a href="/" class="nav-link">Home</a>
-                <a href="/retrospective" class="nav-link active">Retrospective</a>
-                <a href="/planning-poker" class="nav-link">Planning Poker</a>
-                <div class="theme-toggle-wrapper">
-                    <label class="theme-toggle">
-                        <span class="toggle-icons">
-                            <i class="fas fa-sun"></i>
-                            <i class="fas fa-moon"></i>
-                        </span>
-                        <input type="checkbox" id="theme-toggle">
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <app-header></app-header>
 
     <div class="content-wrapper">
         <div class="container">
@@ -150,18 +129,10 @@
     </div>
 
     <!-- Site Footer -->
-    <footer class="site-footer">
-        <div class="footer-container">
-            <div class="footer-links">
-                <a href="/" class="footer-link">Home</a>
-                <a href="/retrospective" class="footer-link">Retrospective</a>
-                <a href="/planning-poker" class="footer-link">Planning Poker</a>
-            </div>
-        </div>
-    </footer>
+    <app-footer></app-footer>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="js/retrospective.js"></script>
+    <script src="/retrospective/retrospective.js"></script>
 </body>
 
 </html>
